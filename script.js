@@ -17,11 +17,11 @@ const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;
 
 // Set default theme
-let currentStoredTheme = 'light';
+let currentStoredTheme = 'dark';
 
 // Try to get saved theme (might not work in some environments)
 try {
-    currentStoredTheme = localStorage.getItem('theme') || 'light';
+    currentStoredTheme = localStorage.getItem('theme') || 'dark';
 } catch (e) {
     console.log('LocalStorage not available, using default theme');
 }
