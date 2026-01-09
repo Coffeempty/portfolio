@@ -15,12 +15,6 @@
 </head>
 <body>
 
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" aria-label="Toggle theme">
-        <span class="sun">☀</span>
-        <span class="moon">☾</span>
-    </button>
-
     <div class="container">
         <header>
             <div class="ascii-art">
@@ -37,173 +31,209 @@
                        |__/           \______/  
             </div>
 
-            <div class="prompt">mehul@vjti:~$ whoami</div>
-            <h1>
-                <span class="name-cycle"></span>
-            </h1>
-            <p class="tagline">Production Engineering @ VJTI Mumbai <span class="japanese-accent">━</span> ML • DL • RL • Robotics <span class="japanese-accent">━</span> SRA SY Core Member</p>
+            <div class="header-content">
+                <!-- Add your profile picture here: assets/profile.jpg -->
+                <div class="profile-image-container">
+                    <img src="assets/profile.jpg" alt="Mehul Totala" class="profile-image">
+                </div>
+                
+                <div class="header-text">
+                    <div class="prompt">mehul@vjti:~$ whoami</div>
+                    <h1>
+                        <span class="name-cycle"></span>
+                    </h1>
+                    <p class="tagline">Production Engineering @ VJTI Mumbai <span class="accent-separator">◆</span> ML • DL • RL • Robotics <span class="accent-separator">◆</span> SRA SY Core Member</p>
+                </div>
+            </div>
 
             <nav>
-                <a href="#about">./about <span class="japanese-accent">私について</span></a>
-                <a href="#skills">./skills <span class="japanese-accent">スキル</span></a>
-                <a href="#projects">./projects <span class="japanese-accent">作品</span></a>
-                <a href="#talents">./talents <span class="japanese-accent">才能</span></a>
-                <a href="#contact">./contact <span class="japanese-accent">連絡</span></a>
+                <a href="#about">./about</a>
+                <a href="#skills">./skills</a>
+                <a href="#projects">./projects</a>
+                <a href="#blogs">./blogs</a>
+                <a href="#talents">./talents</a>
+                <a href="#contact">./contact</a>
             </nav>
         </header>
 
         <section id="about">
             <h2>about_me.txt</h2>
-            <div class="about-content">
-                <p><b>こんにちは！</b>I'm Mehul Totala, a second-year B.Tech student in Production Engineering at VJTI Mumbai.</p>
-                <p>As a Core Member of the Society of Robotics and Automation (SRA), I'm deeply involved in building intelligent systems that combine mechanical design with cutting-edge AI algorithms.</p>
-                <p>My work spans across Machine Learning, Deep Learning, Reinforcement Learning, and Robot Learning—from training neural networks to implementing real-world robotic solutions.</p>
-                <p>Currently exploring: Robot Learning, Computer Vision for Robotics, Production Automation with AI</p>
+            <div class="about-grid">
+                <div class="about-text glass-card">
+                    <p class="greeting">こんにちは！</p>
+                    <p>I'm Mehul Totala, a second-year B.Tech student in Production Engineering at VJTI Mumbai.</p>
+                    <p>As a Core Member of the Society of Robotics and Automation (SRA), I'm deeply involved in building intelligent systems that combine mechanical design with cutting-edge AI algorithms.</p>
+                    <p>My work spans across Machine Learning, Deep Learning, Reinforcement Learning, and Robot Learning—from training neural networks to implementing real-world robotic solutions.</p>
+                    <p class="currently-exploring">Currently exploring: Robot Learning, Computer Vision for Robotics, Production Automation with AI</p>
+                </div>
+                
             </div>
         </section>
 
         <section id="skills">
             <h2>skills.sh --list</h2>
-            <div class="skills">
-
-                <div class="skill-category">
+            <div class="skills-grid">
+                <div class="skill-card glass-card">
                     <h3>Machine Learning</h3>
-                    <ul>
-                        <li>Deep Neural Networks</li>
-                        <li>CNNs & Transformers</li>
-                        <li>Computer Vision</li>
-                        <li>NLP & LLMs</li>
-                        <li>Transfer Learning</li>
-                    </ul>
+                    <div class="skill-items">
+                        <span class="skill-tag">Deep Neural Networks</span>
+                        <span class="skill-tag">CNNs & Transformers</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">NLP & LLMs</span>
+                        <span class="skill-tag">Transfer Learning</span>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-card glass-card">
                     <h3>Reinforcement Learning</h3>
-                    <ul>
-                        <li>DQN, A3C, PPO, SAC</li>
-                        <li>GRPO & Fine-Tuning</li>
-                        <li>Model-based RL</li>
-                        <li>Policy Optimization</li>
-                        <li>Multi-agent Systems</li>
-                    </ul>
+                    <div class="skill-items">
+                        <span class="skill-tag">DQN, A3C, PPO, SAC</span>
+                        <span class="skill-tag">GRPO & Fine-Tuning</span>
+                        <span class="skill-tag">Model-based RL</span>
+                        <span class="skill-tag">Policy Optimization</span>
+                        <span class="skill-tag">Multi-agent Systems</span>
+                    </div>
                 </div>
 
-                <div class="skill-category">
-                    <h3>Robot Learning (currently learning)</h3>
-                    <ul>
-                        <li>ROS Basics</li>
-                        <li>Manipulation Tasks</li>
-                        <li>Vision Systems</li>
-                    </ul>
+                <div class="skill-card glass-card learning-card">
+                    <h3>Robot Learning</h3>
+                    <div class="learning-badge">currently learning</div>
+                    <div class="skill-items">
+                        <span class="skill-tag">ROS Basics</span>
+                        <span class="skill-tag">Manipulation Tasks</span>
+                        <span class="skill-tag">Vision Systems</span>
+                    </div>
                 </div>
 
-                <div class="skill-category">
+                <div class="skill-card glass-card">
                     <h3>Tech Stack</h3>
-                    <ul>
-                        <li>PyTorch & TensorFlow</li>
-                        <li>Python, C++</li>
-                        <li>Docker & Git</li>
-                        <li>Linux/Unix</li>
-                        <li>Production Tools</li>
-                    </ul>
+                    <div class="skill-items">
+                        <span class="skill-tag">PyTorch & TensorFlow</span>
+                        <span class="skill-tag">Python, C++</span>
+                        <span class="skill-tag">Docker & Git</span>
+                        <span class="skill-tag">Linux/Unix</span>
+                        <span class="skill-tag">Production Tools</span>
+                    </div>
                 </div>
-
             </div>
         </section>
 
         <section id="projects">
             <h2>projects.json</h2>
-            <div class="projects">
+            <div class="projects-grid">
 
-                <div class="project-card">
-                    <h3>Marty-100 (under construction)</h3>
-                    <p>MARTY-100 proposes the development of an autonomous table-tennis playing system using the SO100 6DoF arm, combiningmodel-based control and reinforcement learning approaches.</p>
-                    <div class="tech-tags">
-                        <span class="tag">Robotics and Manipulation</span>
-                        <span class="tag">Robot Learning and Reinforcement Learning</span>
-                        <span class="tag">Model-Based Control Systems</span>
-                        <span class="tag">Computer Vision for Robotics</span>
+                <div class="project-card glass-card">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Marty-100</h3>
+                            <span class="project-status">under construction</span>
+                        </div>
+                        <p>MARTY-100 proposes the development of an autonomous table-tennis playing system using the SO100 6DoF arm, combining model-based control and reinforcement learning approaches.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Robotics & Manipulation</span>
+                            <span class="tag">Robot Learning & RL</span>
+                            <span class="tag">Model-Based Control</span>
+                            <span class="tag">Computer Vision</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <h3>Codeuctivity</h3>
-                    <p>AI/ML, NLP, Transformers, LoRA, CodeT5 2025</p>
-                    <ul>
-                        <li>Developed a transformer-powered summarization tool converting code functions into natural-language explanations.</li>
-                        <li>Fine-tuned CodeT5 using LoRA for lightweight, high-performance adaptation.</li>
-                        <li>Integrated reinforcement learning fine-tuning (RLFT) for self-improving summarization performance.</li>
-                    </ul>
-                    <div class="tech-tags">
-                        <span class="tag">AI/ML</span>
-                        <span class="tag">NLP</span>
-                        <span class="tag">Transformers</span>
-                        <span class="tag">LoRA</span>
-                        <span class="tag">CodeT5</span>
+                <div class="project-card glass-card">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Codeuctivity</h3>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <p>A transformer-powered summarization tool converting code functions into natural-language explanations.</p>
+                        <ul class="project-details">
+                            <li>Fine-tuned CodeT5 using LoRA for lightweight, high-performance adaptation</li>
+                            <li>Integrated reinforcement learning fine-tuning (RLFT) for self-improving summarization</li>
+                        </ul>
+                        <div class="tech-tags">
+                            <span class="tag">NLP</span>
+                            <span class="tag">Transformers</span>
+                            <span class="tag">LoRA</span>
+                            <span class="tag">CodeT5</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <h3>RL for LLMs</h3>
-                    <p>Reinforcement Learning, LLMs, GRPO, Synthetic Data Pipelines 2025</p>
-                    <ul>
-                        <li>Implemented RLFT for LLMs using the GRPO algorithm (Generalized REINFORCE with Policy Optimization).</li>
-                        <li>Built a synthetic data pipeline using OpenRouter API, RULER, and GRPO for label-free training.</li>
-                        <li>Designed a closed-loop system enabling dynamic self-training for new tasks.</li>
-                    </ul>
-                    <div class="tech-tags">
-                        <span class="tag">Reinforcement Learning</span>
-                        <span class="tag">LLMs</span>
-                        <span class="tag">GRPO</span>
-                        <span class="tag">Synthetic Data</span>
-                        <span class="tag">Self-Training</span>
+                <div class="project-card glass-card">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>RL for LLMs</h3>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <p>Reinforcement learning fine-tuning for large language models using GRPO algorithm.</p>
+                        <ul class="project-details">
+                            <li>Implemented RLFT using GRPO (Generalized REINFORCE with Policy Optimization)</li>
+                            <li>Built synthetic data pipeline with OpenRouter API, RULER, and GRPO</li>
+                            <li>Designed closed-loop system for dynamic self-training on new tasks</li>
+                        </ul>
+                        <div class="tech-tags">
+                            <span class="tag">Reinforcement Learning</span>
+                            <span class="tag">LLMs</span>
+                            <span class="tag">GRPO</span>
+                            <span class="tag">Self-Training</span>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
 
+        <section id="blogs">
+            <h2>blogs.json</h2>
+            <div class="blog-container">
+                <div class="blog-posts">
+                    <!-- Blog posts will be dynamically loaded here -->
+                </div>
+                <div class="view-all-container">
+                    <a href="blog.html" class="view-all-btn glass-card">
+                        View All Blog Posts
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <section id="talents">
             <h2>talents.sh --list</h2>
-            <div class="talents">
-                <div class="talent-card">
-                    <h3>Stand-up Comedy</h3>
-                    <p>Performed 12+ open mics, won 'Pratistaan', and delivered original comedy sets roasting VJTI life & departments. Making people laugh is my creative outlet.</p>
+            <div class="talents-grid">
+                <div class="talent-card glass-card">
+                    <div class="talent-content talent-content-only">
+                        <h3>Stand-up Comedy</h3>
+                        <p>Performed 12+ open mics, won 'Pratistaan', and delivered original comedy sets roasting VJTI life & departments. Making people laugh is my creative outlet.</p>
+                    </div>
                 </div>
-                <div class="talent-card">
-                    <h3>Poetry & Writing</h3>
-                    <p>Published poems exploring love, solitude, and nostalgia on <a href="https://instagram.com/emptyyy_echoes" target="_blank">@emptyyy_echoes</a>. Words are my way of processing emotions.</p>
+                
+                <div class="talent-card glass-card">
+                    <div class="talent-content talent-content-only">
+                        <h3>Poetry & Writing</h3>
+                        <p>Published poems exploring love, solitude, and nostalgia on <a href="https://instagram.com/emptyyy_echoes" target="_blank">@emptyyy_echoes</a>. Words are my way of processing emotions.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="contact">
             <h2>contact.sh</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 20px;">$ echo "つながりましょう - Let's connect and build intelligent systems together"</p>
-
-            <div class="contact-links">
-                <a href="mailto:mehultotala21@gmail.com" class="contact-link">
-                    <span>email</span>
-                </a>
-                <a href="https://github.com/Coffeempty" target="_blank" class="contact-link">
-                    <span>github</span>
-                </a>
-                <a href="https://linkedin.com/in/mehultotala" target="_blank" class="contact-link">
-                    <span>linkedin</span>
-                </a>
-                <a href="https://x.com/emptysaysstuff" target="_blank" class="contact-link">
-                    <span>X</span>
-                </a>
-                <a href="https://instagram.com/mehultotala" target="_blank" class="contact-link">
-                    <span>instagram</span>
-                </a>                
+            <div class="contact-content glass-card">
+                <p class="contact-intro">つながりましょう - Let's connect and build intelligent systems together</p>
+                <div class="contact-links">
+                    <a href="mailto:mehultotala21@gmail.com" class="contact-link neuro-card">email</a>
+                    <a href="https://github.com/Coffeempty" target="_blank" class="contact-link neuro-card">github</a>
+                    <a href="https://linkedin.com/in/mehultotala" target="_blank" class="contact-link neuro-card">linkedin</a>
+                    <a href="https://x.com/emptysaysstuff" target="_blank" class="contact-link neuro-card">twitter</a>
+                    <a href="https://instagram.com/mehultotala" target="_blank" class="contact-link neuro-card">instagram</a>
+                </div>
             </div>
         </section>
 
         <footer>
-            <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
-            <p>© 2025 Mehul Totala <span class="japanese-accent">◆</span> VJTI Mumbai</p>
-            <p style="opacity: 0.6; margin-top: 8px; font-size: 0.85em;">Built with dedication and ☕ <span class="japanese-accent">◆</span>
+            <div class="footer-content">
+                <p>© 2025 Mehul Totala <span class="accent-separator">◆</span> VJTI Mumbai</p>
+                <p class="footer-note">Built with dedication and ☕</p>
+            </div>
         </footer>
 
     </div>

@@ -10,47 +10,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==========================================
-// THEME TOGGLE
-// ==========================================
-
-const themeToggle = document.getElementById('theme-toggle');
-const html = document.documentElement;
-
-// Set default theme
-let currentStoredTheme = 'dark';
-
-// Try to get saved theme (might not work in some environments)
-try {
-    currentStoredTheme = localStorage.getItem('theme') || 'dark';
-} catch (e) {
-    console.log('LocalStorage not available, using default theme');
-}
-
-html.setAttribute('data-theme', currentStoredTheme);
-
-themeToggle.addEventListener('click', function() {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    html.setAttribute('data-theme', newTheme);
-    
-    // Try to save theme preference
-    try {
-        localStorage.setItem('theme', newTheme);
-    } catch (e) {
-        console.log('Cannot save theme preference');
-    }
-    
-    // Add rotation animation
-    this.style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-        this.style.transform = '';
-    }, 300);
-    
-    console.log('Theme switched to: ' + newTheme);
-});
-
-// ==========================================
 // DYNAMIC MULTILINGUAL NAME TYPING EFFECT
 // ==========================================
 
@@ -58,9 +17,6 @@ const names = [
     { text: 'Mehul Totala', lang: 'en' },
     { text: 'メフール・トタラ', lang: 'jp' },
     { text: 'मेहुल तोतला', lang: 'hi' }
-    // { text: 'メフール', lang: 'jp-short' },
-    // { text: 'Mehul', lang: 'en-short' },
-    // { text: 'मेहुल', lang: 'hi-short' }
 ];
 
 let currentNameIndex = 0;
@@ -76,100 +32,70 @@ function typeNameEffect() {
     const currentName = names[currentNameIndex];
     
     if (isDeleting) {
-        // Delete character
         currentCharIndex--;
         nameElement.textContent = currentName.text.substring(0, currentCharIndex);
-        typingDelay = 30; // Faster deletion
+        typingDelay = 30;
         
-        // When fully deleted
         if (currentCharIndex === 0) {
             isDeleting = false;
-            currentNameIndex = (currentNameIndex + 1) % names.length; // Move to next name
-            typingDelay = 200; // Pause before typing next name
+            currentNameIndex = (currentNameIndex + 1) % names.length;
+            typingDelay = 200;
         }
     } else {
-        // Type character
         currentCharIndex++;
         nameElement.textContent = currentName.text.substring(0, currentCharIndex);
-        typingDelay = 80; // Natural typing speed
+        typingDelay = 80;
         
-        // When fully typed
         if (currentCharIndex === currentName.text.length) {
             isDeleting = true;
-            typingDelay = 1500; // Pause to read (1.5 seconds)
+            typingDelay = 1500;
         }
     }
     
     setTimeout(typeNameEffect, typingDelay);
 }
 
-// Start the dynamic typing effect immediately
 if (nameElement) {
-    nameElement.textContent = ''; // Clear initial text
-    setTimeout(typeNameEffect, 800); // Start after brief delay
+    nameElement.textContent = '';
+    setTimeout(typeNameEffect, 800);
 }
 
 // ==========================================
-// JAPANESE SECTION LABELS
+// MOUSE GLOW EFFECT
 // ==========================================
 
-// Add Japanese translations to section headers
-const sectionTranslations = {
-    'about_me.txt': '私について',
-    'skills.sh --list': 'スキル',
-    'projects.json': 'プロジェクト',
-    'talents.sh --list': '才能',
-    'contact.sh': '連絡先'
-};
-
-document.querySelectorAll('h2').forEach(h2 => {
-    const text = h2.textContent.trim();
-    if (sectionTranslations[text]) {
-        h2.setAttribute('data-jp', sectionTranslations[text]);
-    }
-});
-
-// ==========================================
-// SMOOTH SCROLL INDICATOR
-// ==========================================
-
-let lastScrollTop = 0;
-const scrollIndicator = document.createElement('div');
-scrollIndicator.style.cssText = `
+let mouseGlow = document.createElement('div');
+mouseGlow.style.cssText = `
     position: fixed;
-    top: 8px;
-    left: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
-    z-index: 999;
-    transition: width 0.1s ease;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 107, 74, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    opacity: 0;
 `;
-document.body.appendChild(scrollIndicator);
+document.body.appendChild(mouseGlow);
 
-window.addEventListener('scroll', () => {
-    const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    scrollIndicator.style.width = scrollPercent + '%';
-    
-    lastScrollTop = window.scrollY;
+document.addEventListener('mousemove', (e) => {
+    mouseGlow.style.left = e.clientX + 'px';
+    mouseGlow.style.top = e.clientY + 'px';
+    mouseGlow.style.opacity = '1';
+});
+
+document.addEventListener('mouseleave', () => {
+    mouseGlow.style.opacity = '0';
 });
 
 // ==========================================
-// PARALLAX EFFECT FOR SECTIONS (DISABLED - WAS CAUSING SCROLL ISSUES)
+// ENHANCED CARD INTERACTIONS
 // ==========================================
 
-// Removed parallax to fix scrolling performance
-
-// ==========================================
-// CARD TILT EFFECT (Japanese aesthetic)
-// ==========================================
-
-const cards = document.querySelectorAll('.project-card, .skill-category, .talent-card');
+const cards = document.querySelectorAll('.glass-card, .neuro-card');
 
 cards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transition = 'all 0.1s ease';
-    });
-    
     card.addEventListener('mousemove', function(e) {
         const rect = this.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -178,15 +104,53 @@ cards.forEach(card => {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
+        const rotateX = (y - centerY) / 30;
+        const rotateY = (centerX - x) / 30;
         
-        this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+        this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
     });
     
     card.addEventListener('mouseleave', function() {
-        this.style.transition = 'all 0.3s ease';
         this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+});
+
+// ==========================================
+// INTERSECTION OBSERVER FOR FADE-IN
+// ==========================================
+
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('section').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(50px)';
+    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(section);
+});
+
+// ==========================================
+// PARALLAX SCROLLING EFFECT
+// ==========================================
+
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallaxElements = document.querySelectorAll('.profile-image-container, .about-image, .talent-image');
+    
+    parallaxElements.forEach(el => {
+        const speed = 0.5;
+        el.style.transform = `translateY(${scrolled * speed * 0.1}px)`;
     });
 });
 
@@ -194,76 +158,73 @@ cards.forEach(card => {
 // CONSOLE EASTER EGG
 // ==========================================
 
-console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #d84315; font-family: monospace;');
-console.log('%c  Welcome to my portfolio             ', 'color: #d84315; font-weight: bold; font-family: monospace;');
-console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #d84315; font-family: monospace;');
-console.log('%c  Inspecting the code? Nice!          ', 'color: #2d2d2d; font-family: monospace;');
-console.log('%c  Email: mehultotala21@gmail.com      ', 'color: #c5a572; font-family: monospace;');
-console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #d84315; font-family: monospace;');
+console.log('%c┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓', 'color: #ff6b4a; font-family: monospace;');
+console.log('%c┃  Welcome to my portfolio             ┃', 'color: #ff6b4a; font-weight: bold; font-family: monospace;');
+console.log('%c┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛', 'color: #ff6b4a; font-family: monospace;');
+console.log('%c  Inspecting the code? Nice!          ', 'color: #e8e6e3; font-family: monospace;');
+console.log('%c  Email: mehultotala21@gmail.com      ', 'color: #ecc97e; font-family: monospace;');
 
 // ==========================================
 // KEYBOARD SHORTCUTS
 // ==========================================
 
 document.addEventListener('keydown', function(e) {
-    // Press 'h' to go home
     if (e.key === 'h' && !e.ctrlKey && !e.metaKey) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
-    // Press 'j' to scroll down
     if (e.key === 'j') {
-        window.scrollBy({ top: 100, behavior: 'smooth' });
+        window.scrollBy({ top: 150, behavior: 'smooth' });
     }
     
-    // Press 'k' to scroll up
     if (e.key === 'k') {
-        window.scrollBy({ top: -100, behavior: 'smooth' });
+        window.scrollBy({ top: -150, behavior: 'smooth' });
     }
 });
 
 // ==========================================
-// JAPANESE SEASONAL PARTICLES (Optional)
+// BLOG FUNCTIONALITY
 // ==========================================
 
-function createParticles() {
-    const particles = ['◆', '✦', '◇', '○'];
-    
-    setInterval(() => {
-        const particle = document.createElement('div');
-        particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-        particle.style.cssText = `
-            position: fixed;
-            left: ${Math.random() * 100}%;
-            top: -20px;
-            color: var(--accent-gold);
-            opacity: 0.15;
-            font-size: ${Math.random() * 20 + 10}px;
-            pointer-events: none;
-            z-index: 1;
-            animation: fall ${Math.random() * 10 + 10}s linear;
+const blogPosts = [
+    {
+        id: 1,
+        title: "Surviving Somewhere in Between",
+        date: "January 9, 2026",
+        excerpt: "a non ai writing piece that may or may not interest you"
+    }
+];
+
+function renderBlogPosts() {
+    const blogContainer = document.querySelector('.blog-posts');
+
+    if (!blogContainer) return;
+
+    blogContainer.innerHTML = '';
+
+    blogPosts.forEach(post => {
+        const blogPostElement = document.createElement('div');
+        blogPostElement.className = 'blog-post glass-card';
+
+        blogPostElement.innerHTML = `
+            <h3>${post.title}</h3>
+            <span class="date">${post.date}</span>
+            <p>${post.excerpt}</p>
         `;
-        
-        document.body.appendChild(particle);
-        
-        setTimeout(() => particle.remove(), 15000);
-    }, 3000);
+
+        blogPostElement.addEventListener('click', () => {
+            if(post.id === 1) {
+                window.location.href = 'blog_posts/surviving-between-polymath.html';
+            } else {
+                window.location.href = 'blog.html';
+            }
+        });
+
+        blogContainer.appendChild(blogPostElement);
+    });
 }
 
-// Add fall animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fall {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Uncomment to enable particles
-// createParticles();
+document.addEventListener('DOMContentLoaded', renderBlogPosts);
 
 // ==========================================
 // INTERACTIVE PORTFOLIO COMMANDS
@@ -271,43 +232,44 @@ document.head.appendChild(style);
 
 window.portfolio = {
     info: function() {
-        console.log('%c╔══════════════════════════════════════╗', 'color: #d84315;');
-        console.log('%c║  Mehul Totala                        ║', 'color: #d84315;');
-        console.log('%c║  VJTI Mumbai | Production Engg      ║', 'color: #2d2d2d;');
-        console.log('%c║  SRA Core Member | ML/RL Enthusiast ║', 'color: #2d2d2d;');
-        console.log('%c╚══════════════════════════════════════╝', 'color: #d84315;');
+        console.log('%c╔═══════════════════════════════════════╗', 'color: #ff6b4a;');
+        console.log('%c║  Mehul Totala                        ║', 'color: #ff6b4a;');
+        console.log('%c║  VJTI Mumbai | Production Engg      ║', 'color: #e8e6e3;');
+        console.log('%c║  SRA Core Member | ML/RL Enthusiast ║', 'color: #e8e6e3;');
+        console.log('%c╚═══════════════════════════════════════╝', 'color: #ff6b4a;');
         return 'Portfolio loaded successfully';
     },
-    
+
     skills: function() {
-        console.log('%cTechnical Skills:', 'color: #d84315; font-weight: bold;');
+        console.log('%cTechnical Skills:', 'color: #ff6b4a; font-weight: bold;');
         console.log('  ML/DL: PyTorch, TensorFlow');
         console.log('  RL: PPO, SAC, GRPO');
         console.log('  Languages: Python, C++');
         return 'Check the skills section for details';
     },
-    
+
     contact: function() {
-        console.log('%cContact Information:', 'color: #d84315; font-weight: bold;');
+        console.log('%cContact Information:', 'color: #ff6b4a; font-weight: bold;');
         console.log('  Email: mehultotala21@gmail.com');
-        console.log('  GitHub: github.com/mehultotala');
-        console.log('  LinkedIn: linkedin.com/in/mehul-totala');
-        return 'Lets connect';
+        console.log('  GitHub: github.com/Coffeempty');
+        console.log('  LinkedIn: linkedin.com/in/mehultotala');
+        return "Let's connect";
     },
-    
-    theme: function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        console.log('%cCurrent Theme: ' + currentTheme, 'color: #c5a572; font-weight: bold;');
-        console.log('  Use the toggle button to switch themes');
-        return 'Theme: ' + currentTheme;
+
+    blogs: function() {
+        console.log('%cBlog Posts:', 'color: #ff6b4a; font-weight: bold;');
+        blogPosts.forEach(post => {
+            console.log(`  ${post.title} - ${post.date}`);
+        });
+        return 'Check the blogs section for details';
     }
 };
 
-console.log('%cTry these commands:', 'color: #c5a572; font-weight: bold;');
-console.log('%c   portfolio.info()', 'color: #6b6b6b;');
-console.log('%c   portfolio.skills()', 'color: #6b6b6b;');
-console.log('%c   portfolio.contact()', 'color: #6b6b6b;');
-console.log('%c   portfolio.theme()', 'color: #6b6b6b;');
+console.log('%cTry these commands:', 'color: #ecc97e; font-weight: bold;');
+console.log('%c   portfolio.info()', 'color: #a8a8a8;');
+console.log('%c   portfolio.skills()', 'color: #a8a8a8;');
+console.log('%c   portfolio.contact()', 'color: #a8a8a8;');
+console.log('%c   portfolio.blogs()', 'color: #a8a8a8;');
 
 // ==========================================
 // PAGE LOAD ANIMATION
@@ -316,7 +278,17 @@ console.log('%c   portfolio.theme()', 'color: #6b6b6b;');
 window.addEventListener('load', () => {
     document.body.style.opacity = '0';
     setTimeout(() => {
-        document.body.style.transition = 'opacity 1.5s ease';
+        document.body.style.transition = 'opacity 1.2s ease';
         document.body.style.opacity = '1';
     }, 100);
 });
+
+// ==========================================
+// DYNAMIC YEAR IN FOOTER
+// ==========================================
+
+const currentYear = new Date().getFullYear();
+const footerYear = document.querySelector('footer p');
+if (footerYear && footerYear.textContent.includes('2025')) {
+    footerYear.innerHTML = footerYear.innerHTML.replace('2025', currentYear);
+}
