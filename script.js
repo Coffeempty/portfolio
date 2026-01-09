@@ -1,3 +1,73 @@
+// ==========================================
+// CUSTOM CURSOR
+// ==========================================
+const cursor = document.createElement('div');
+cursor.className = 'custom-cursor';
+document.body.appendChild(cursor);
+
+const cursorDot = document.createElement('div');
+cursorDot.className = 'cursor-dot';
+document.body.appendChild(cursorDot);
+
+let mouseX = 0, mouseY = 0;
+let cursorX = 0, cursorY = 0;
+let isReading = false;
+
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Instant dot movement
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top = e.clientY + 'px';
+    
+    // Check if over text content
+    const element = document.elementFromPoint(e.clientX, e.clientY);
+    const isOverText = element && (
+        element.matches('p, li, h1, h2, h3, h4, h5, h6, span, .content, .about-text, .project-card, .talent-content') ||
+        element.closest('p, li, .content, .about-text, .project-card, .talent-content')
+    );
+    
+    if (isOverText && !isReading) {
+        isReading = true;
+        cursor.classList.add('reading');
+        cursorDot.classList.add('reading');
+    } else if (!isOverText && isReading) {
+        isReading = false;
+        cursor.classList.remove('reading');
+        cursorDot.classList.remove('reading');
+    }
+});
+
+function animateCursor() {
+    const dx = mouseX - cursorX;
+    const dy = mouseY - cursorY;
+    
+    cursorX += dx * 0.15;
+    cursorY += dy * 0.15;
+    
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    
+    requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
+
+// Hover effect for interactive elements
+document.addEventListener('DOMContentLoaded', () => {
+    const interactiveElements = document.querySelectorAll('a, button, .glass-card, .neuro-card, .skill-tag, .tag, .blog-post, .view-all-btn, .back-button');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+            cursor.classList.remove('reading');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+        });
+    });
+});
+
 // Smooth scrolling for nav links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -61,35 +131,6 @@ if (nameElement) {
 }
 
 // ==========================================
-// MOUSE GLOW EFFECT
-// ==========================================
-
-let mouseGlow = document.createElement('div');
-mouseGlow.style.cssText = `
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 107, 74, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.3s ease;
-    opacity: 0;
-`;
-document.body.appendChild(mouseGlow);
-
-document.addEventListener('mousemove', (e) => {
-    mouseGlow.style.left = e.clientX + 'px';
-    mouseGlow.style.top = e.clientY + 'px';
-    mouseGlow.style.opacity = '1';
-});
-
-document.addEventListener('mouseleave', () => {
-    mouseGlow.style.opacity = '0';
-});
-
-// ==========================================
 // ENHANCED CARD INTERACTIONS
 // ==========================================
 
@@ -107,7 +148,7 @@ cards.forEach(card => {
         const rotateX = (y - centerY) / 30;
         const rotateY = (centerX - x) / 30;
         
-        this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
     });
     
     card.addEventListener('mouseleave', function() {
@@ -158,9 +199,9 @@ window.addEventListener('scroll', () => {
 // CONSOLE EASTER EGG
 // ==========================================
 
-console.log('%c┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓', 'color: #ff6b4a; font-family: monospace;');
-console.log('%c┃  Welcome to my portfolio             ┃', 'color: #ff6b4a; font-weight: bold; font-family: monospace;');
-console.log('%c┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛', 'color: #ff6b4a; font-family: monospace;');
+console.log('%c┌────────────────────────────────────┐', 'color: #ff6b4a; font-family: monospace;');
+console.log('%c│  Welcome to my portfolio             │', 'color: #ff6b4a; font-weight: bold; font-family: monospace;');
+console.log('%c└────────────────────────────────────┘', 'color: #ff6b4a; font-family: monospace;');
 console.log('%c  Inspecting the code? Nice!          ', 'color: #e8e6e3; font-family: monospace;');
 console.log('%c  Email: mehultotala21@gmail.com      ', 'color: #ecc97e; font-family: monospace;');
 
