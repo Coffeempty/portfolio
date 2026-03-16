@@ -1,243 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mehul Totala - Production Engineering student at VJTI Mumbai | ML, DL, RL & Robotics | SRA VJTI Core Member">
-    <title>Mehul's Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mehul Totala — Production Engineering at VJTI Mumbai. Building robots, doing open mics, writing things.">
+  <title>Mehul Totala</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Kalam:wght@300;400;700&family=Nunito:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+  <!-- Watercolor paper grain -->
+  <svg class="paper-grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="paper-noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.45 0.8" numOctaves="5" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix"
+        values="0 0 0 0 0.48
+                0 0 0 0 0.38
+                0 0 0 0 0.28
+                0 0 0 0 0.13"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#paper-noise)"/>
+  </svg>
+
+  <!-- Cursor -->
+  <div id="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav class="site-nav" id="site-nav">
+    <a href="index.html" class="nav-logo">MT</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#writing">Writing</a>
+      <a href="mailto:mehultotala21@gmail.com" class="nav-connect">Connect</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero" id="hero">
+      <div id="hero-canvas-wrap" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="hero-greeting">hi, I'm</p>
+        <h1 class="hero-name">Mehul Totala</h1>
+        <p class="hero-bio">Second year at VJTI Mumbai, studying production engineering. Most of my time goes into robots, computer vision, and language models. The rest goes to stand-up, poetry, and whatever I've fallen into this week.</p>
+      </div>
+
+      <!-- Easter egg: #33 barely visible -->
+      <span class="margin-num" style="bottom:14%;right:3.5%;transform:rotate(-7deg);" aria-hidden="true">33</span>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ══ WORK ══ -->
+    <section class="section" id="work">
+      <div class="container">
+        <svg class="section-rule" viewBox="0 0 1000 10" preserveAspectRatio="none" fill="none" stroke="#c2b5a3" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M 0 5 Q 125 1 250 5 Q 375 9 500 5 Q 625 1 750 5 Q 875 9 1000 5"/>
+        </svg>
+      </div>
+
+      <!-- Box box box Easter egg -->
+      <span class="box-call" style="top:22px;right:calc(var(--px) + 60px);" aria-hidden="true">box box box</span>
+
+      <!-- Easter egg: #1 annotation (Verstappen's current number) -->
+      <span class="margin-num" style="bottom:8%;left:1%;transform:rotate(5deg);" aria-hidden="true">1</span>
+
+      <div class="container">
+        <h2 class="section-title reveal">Work</h2>
+
+        <div class="projects">
+
+          <!-- Marty-100 -->
+          <article class="project-card reveal">
+            <div class="project-media">
+              <div class="project-placeholder">
+                <div class="placeholder-gradient"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="project-meta">
+                <div class="project-tags">
+                  <span class="tag">Robotics</span>
+                  <span class="tag">RL</span>
+                  <span class="tag">Vision</span>
+                </div>
+                <span class="project-status">in progress</span>
+              </div>
+              <h3 class="project-title">Marty-100</h3>
+              <p class="project-desc">Autonomous table-tennis robot using the SO100 6DoF arm — model-based control, reinforcement learning, and real-time computer vision working together to return the ball.</p>
+              <div class="project-tags-bottom">
+                <span class="tag-sm">Model-Based Control</span>
+                <span class="tag-sm">Robot Learning</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Codeuctivity -->
+          <article class="project-card reveal" style="--delay:0.1s">
+            <div class="project-media">
+              <div class="project-placeholder">
+                <div class="placeholder-gradient" style="--ph-color:180,140,56"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="project-meta">
+                <div class="project-tags">
+                  <span class="tag">NLP</span>
+                  <span class="tag">Transformers</span>
+                  <span class="tag">LoRA</span>
+                </div>
+                <span class="project-year">2025</span>
+              </div>
+              <h3 class="project-title">Codeuctivity</h3>
+              <p class="project-desc">CodeT5 fine-tuned with LoRA to turn code functions into clean natural-language explanations — then improved with RLFT so the model keeps getting better through use.</p>
+              <div class="project-tags-bottom">
+                <span class="tag-sm">CodeT5</span>
+                <span class="tag-sm">RLFT</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- RL for LLMs -->
+          <article class="project-card reveal" style="--delay:0.2s">
+            <div class="project-media">
+              <div class="project-placeholder">
+                <div class="placeholder-gradient" style="--ph-color:100,140,100"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div class="project-meta">
+                <div class="project-tags">
+                  <span class="tag">RL</span>
+                  <span class="tag">LLMs</span>
+                  <span class="tag">GRPO</span>
+                </div>
+                <span class="project-year">2025</span>
+              </div>
+              <h3 class="project-title">RL for LLMs</h3>
+              <p class="project-desc">GRPO-based reinforcement learning fine-tuning for large language models. Synthetic data pipeline via OpenRouter + RULER, and a closed-loop system that self-trains on new tasks.</p>
+              <div class="project-tags-bottom">
+                <span class="tag-sm">GRPO</span>
+                <span class="tag-sm">Self-Training</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Doodle: coffee cup -->
+      <div class="doodle-wrap" style="top:5%;right:2%;transform:rotate(8deg);" aria-hidden="true">
+        <svg class="doodle" width="52" height="58" viewBox="0 0 52 58" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 7 20 L 10 52 Q 10 56 14 56 L 38 56 Q 42 56 42 52 L 45 20 Z"/>
+          <path d="M 7 20 Q 26 22 45 20"/>
+          <path d="M 42 30 Q 52 28 52 38 Q 52 48 42 46"/>
+          <path d="M 18 16 Q 16 11 18 6 Q 20 2 18 -1" stroke-width="1.5"/>
+          <path d="M 27 16 Q 25 11 27 6 Q 29 2 27 -1" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <!-- Doodle: paper airplane -->
+      <div class="doodle-wrap" style="bottom:7%;right:4%;transform:rotate(-28deg);" aria-hidden="true">
+        <svg class="doodle" width="56" height="46" viewBox="0 0 56 46" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 2 22 L 54 4 L 32 44 Z"/>
+          <path d="M 2 22 L 32 26 L 32 44"/>
+          <path d="M 32 26 L 54 4"/>
+          <path d="M 2 22 L 20 24"/>
+        </svg>
+      </div>
+
+      <!-- Doodle: F1 car Easter egg — tucked bottom-left, very faint -->
+      <div class="doodle-wrap" style="bottom:9%;left:1.5%;transform:rotate(-4deg);" aria-hidden="true">
+        <svg class="doodle" width="76" height="28" viewBox="0 0 76 28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.22;">
+          <path d="M 9 14 Q 13 5 23 4 L 52 4 Q 62 5 65 14 Q 62 23 52 24 L 23 24 Q 13 23 9 14 Z"/>
+          <path d="M 9 14 L 2 14" stroke-width="2.2"/>
+          <path d="M 7 12 L 2 10 M 7 16 L 2 18"/>
+          <path d="M 65 9 L 73 7 L 73 21 L 65 19"/>
+          <path d="M 30 4 Q 35 0 42 0 Q 49 0 53 4"/>
+          <rect x="15" y="1" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+          <rect x="50" y="1" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+          <rect x="15" y="23" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+          <rect x="50" y="23" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+        </svg>
+      </div>
+
+    </section>
+
+    <!-- ══ WRITING ══ -->
+    <section class="section" id="writing">
+      <div class="container">
+        <svg class="section-rule" viewBox="0 0 1000 10" preserveAspectRatio="none" fill="none" stroke="#c2b5a3" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M 0 5 Q 80 2 160 5 Q 240 8 320 5 Q 400 2 480 5 Q 560 8 640 5 Q 720 2 800 5 Q 880 8 960 5 Q 980 3 1000 5"/>
+        </svg>
+
+        <h2 class="section-title reveal">Writing</h2>
+
+        <div class="posts-list">
+          <a href="blog_posts/surviving-between-polymath.html" class="post-entry reveal">
+            <div class="post-entry-left">
+              <span class="post-entry-date">Jan 2026</span>
+            </div>
+            <div class="post-entry-right">
+              <span class="post-entry-title">Surviving Somewhere in Between</span>
+              <span class="post-entry-excerpt">On being a polymath, the chaos of curiosity, and trying to prioritise the mess — written at 3am, meant for future me.</span>
+            </div>
+            <span class="post-entry-arrow">→</span>
+          </a>
+        </div>
+
+        <a href="blog.html" class="see-all reveal">All writing →</a>
+      </div>
+
+      <!-- Doodle: open book -->
+      <div class="doodle-wrap" style="top:10%;left:3%;transform:rotate(-8deg);" aria-hidden="true">
+        <svg class="doodle" width="54" height="44" viewBox="0 0 54 44" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 2 6 Q 2 2 6 2 L 25 2 Q 27 2 27 6 L 27 40 Q 15 38 2 42 Z"/>
+          <path d="M 52 6 Q 52 2 48 2 L 29 2 Q 27 2 27 6 L 27 40 Q 39 38 52 42 Z"/>
+          <path d="M 27 4 L 27 40"/>
+          <path d="M 7 14 L 23 12 M 7 20 L 23 18 M 7 26 L 22 24" stroke-width="1.3"/>
+          <path d="M 31 12 L 47 14 M 31 18 L 47 20 M 32 24 L 47 26" stroke-width="1.3"/>
+        </svg>
+      </div>
+
+      <!-- Doodle: squiggles -->
+      <div class="doodle-wrap" style="bottom:20%;right:5%;" aria-hidden="true">
+        <svg class="doodle" width="68" height="32" viewBox="0 0 72 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="opacity:0.35;">
+          <path d="M 0 8 Q 8 2 16 8 Q 24 14 32 8 Q 40 2 48 8 Q 56 14 64 8 Q 68 5 72 6"/>
+          <path d="M 0 20 Q 8 14 16 20 Q 24 26 32 20 Q 40 14 48 20 Q 56 26 64 20 Q 68 17 72 18"/>
+        </svg>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="site-footer">
     <div class="container">
-        <header>
-            <div class="ascii-art">
-           /$$      /$$        /$$$$$$$$       
-          | $$$    /$$$       |__  $$__/       
-  /$$$$$$ | $$$$  /$$$$  /$$$$$$ | $$ /$$   /$$
- /$$__  $$| $$ $$/$$ $$ /$$__  $$| $$| $$  | $$
-| $$$$$$$$| $$  $$$| $$| $$  \ $$| $$| $$  | $$
-| $$_____/| $$\  $ | $$| $$  | $$| $$| $$  | $$
-|  $$$$$$$| $$ \/  | $$| $$$$$$$/| $$|  $$$$$$$
- \_______/|__/     |__/| $$____/ |__/ \____  $$
-                       | $$           /$$  | $$
-                       | $$          |  $$$$$$/
-                       |__/           \______/  
-            </div>
+      <div class="footer-inner">
+        <div class="footer-left">
+          <p class="footer-tagline">made slowly, with intention.</p>
+          <p class="footer-copy">© <span id="footer-year">2026</span> Mehul Totala &nbsp;·&nbsp; VJTI Mumbai</p>
+        </div>
+        <div class="footer-right">
+          <div class="footer-links">
+            <a href="mailto:mehultotala21@gmail.com"        class="footer-link">email</a>
+            <a href="https://github.com/Coffeempty"         target="_blank" rel="noopener" class="footer-link">github</a>
+            <a href="https://linkedin.com/in/mehultotala"   target="_blank" rel="noopener" class="footer-link">linkedin</a>
+            <a href="https://x.com/emptysaysstuff"          target="_blank" rel="noopener" class="footer-link">twitter</a>
+            <a href="https://instagram.com/emptyyy_echoes"  target="_blank" rel="noopener" class="footer-link">poems</a>
+          </div>
+          <div class="eq-bars" title="always listening" aria-hidden="true">
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+          </div>
+        </div>
+      </div>
 
-            <div class="header-content">
-                <!-- Add your profile picture here: assets/profile.jpg -->
-                <div class="profile-image-container">
-                    <img src="assets/profile.jpg" alt="Mehul Totala" class="profile-image">
-                </div>
-                
-                <div class="header-text">
-                    <div class="prompt">mehul@vjti:~$ whoami</div>
-                    <h1>
-                        <span class="name-cycle"></span>
-                    </h1>
-                    <p class="tagline">Production Engineering @ VJTI Mumbai <span class="accent-separator">◆</span> ML • DL • RL • Robotics <span class="accent-separator">◆</span> SRA SY Core Member</p>
-                </div>
-            </div>
-
-            <nav>
-                <a href="#about">./about</a>
-                <a href="#skills">./skills</a>
-                <a href="#projects">./projects</a>
-                <a href="#blogs">./blogs</a>
-                <a href="#talents">./talents</a>
-                <a href="#contact">./contact</a>
-            </nav>
-        </header>
-
-        <section id="about">
-            <h2>about_me.txt</h2>
-            <div class="about-grid">
-                <div class="about-text glass-card">
-                    <p class="greeting">こんにちは！</p>
-                    <p>I'm Mehul Totala, a second-year B.Tech student in Production Engineering at VJTI Mumbai.</p>
-                    <p>As a Core Member of the Society of Robotics and Automation (SRA), I'm deeply involved in building intelligent systems that combine mechanical design with cutting-edge AI algorithms.</p>
-                    <p>My work spans across Machine Learning, Deep Learning, Reinforcement Learning, and Robot Learning—from training neural networks to implementing real-world robotic solutions.</p>
-                    <p class="currently-exploring">Currently exploring: Robot Learning, Computer Vision for Robotics, Production Automation with AI</p>
-                </div>
-                
-            </div>
-        </section>
-
-        <section id="skills">
-            <h2>skills.sh --list</h2>
-            <div class="skills-grid">
-                <div class="skill-card glass-card">
-                    <h3>Machine Learning</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">Deep Neural Networks</span>
-                        <span class="skill-tag">CNNs & Transformers</span>
-                        <span class="skill-tag">Computer Vision</span>
-                        <span class="skill-tag">NLP & LLMs</span>
-                        <span class="skill-tag">Transfer Learning</span>
-                    </div>
-                </div>
-
-                <div class="skill-card glass-card">
-                    <h3>Reinforcement Learning</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">DQN, A3C, PPO, SAC</span>
-                        <span class="skill-tag">GRPO & Fine-Tuning</span>
-                        <span class="skill-tag">Model-based RL</span>
-                        <span class="skill-tag">Policy Optimization</span>
-                        <span class="skill-tag">Multi-agent Systems</span>
-                    </div>
-                </div>
-
-                <div class="skill-card glass-card learning-card">
-                    <h3>Robot Learning</h3>
-                    <div class="learning-badge">currently learning</div>
-                    <div class="skill-items">
-                        <span class="skill-tag">ROS Basics</span>
-                        <span class="skill-tag">Manipulation Tasks</span>
-                        <span class="skill-tag">Vision Systems</span>
-                    </div>
-                </div>
-
-                <div class="skill-card glass-card">
-                    <h3>Tech Stack</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">PyTorch & TensorFlow</span>
-                        <span class="skill-tag">Python, C++</span>
-                        <span class="skill-tag">Docker & Git</span>
-                        <span class="skill-tag">Linux/Unix</span>
-                        <span class="skill-tag">Production Tools</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects">
-            <h2>projects.json</h2>
-            <div class="projects-grid">
-
-                <div class="project-card glass-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Marty-100</h3>
-                            <span class="project-status">under construction</span>
-                        </div>
-                        <p>MARTY-100 proposes the development of an autonomous table-tennis playing system using the SO100 6DoF arm, combining model-based control and reinforcement learning approaches.</p>
-                        <div class="tech-tags">
-                            <span class="tag">Robotics & Manipulation</span>
-                            <span class="tag">Robot Learning & RL</span>
-                            <span class="tag">Model-Based Control</span>
-                            <span class="tag">Computer Vision</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card glass-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Codeuctivity</h3>
-                            <span class="project-year">2025</span>
-                        </div>
-                        <p>A transformer-powered summarization tool converting code functions into natural-language explanations.</p>
-                        <ul class="project-details">
-                            <li>Fine-tuned CodeT5 using LoRA for lightweight, high-performance adaptation</li>
-                            <li>Integrated reinforcement learning fine-tuning (RLFT) for self-improving summarization</li>
-                        </ul>
-                        <div class="tech-tags">
-                            <span class="tag">NLP</span>
-                            <span class="tag">Transformers</span>
-                            <span class="tag">LoRA</span>
-                            <span class="tag">CodeT5</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card glass-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>RL for LLMs</h3>
-                            <span class="project-year">2025</span>
-                        </div>
-                        <p>Reinforcement learning fine-tuning for large language models using GRPO algorithm.</p>
-                        <ul class="project-details">
-                            <li>Implemented RLFT using GRPO (Generalized REINFORCE with Policy Optimization)</li>
-                            <li>Built synthetic data pipeline with OpenRouter API, RULER, and GRPO</li>
-                            <li>Designed closed-loop system for dynamic self-training on new tasks</li>
-                        </ul>
-                        <div class="tech-tags">
-                            <span class="tag">Reinforcement Learning</span>
-                            <span class="tag">LLMs</span>
-                            <span class="tag">GRPO</span>
-                            <span class="tag">Self-Training</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="blogs">
-            <h2>blogs.json</h2>
-            <div class="blog-container">
-                <div class="blog-posts">
-                    <!-- Blog posts will be dynamically loaded here -->
-                </div>
-                <div class="view-all-container">
-                    <a href="blog.html" class="view-all-btn glass-card">
-                        View All Blog Posts
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="talents">
-            <h2>talents.sh --list</h2>
-            <div class="talents-grid">
-                <div class="talent-card glass-card">
-                    <div class="talent-content talent-content-only">
-                        <h3>Stand-up Comedy</h3>
-                        <p>Performed 12+ open mics, won 'Pratistaan', and delivered original comedy sets roasting VJTI life & departments. Making people laugh is my creative outlet.</p>
-                    </div>
-                </div>
-                
-                <div class="talent-card glass-card">
-                    <div class="talent-content talent-content-only">
-                        <h3>Poetry & Writing</h3>
-                        <p>Published poems exploring love, solitude, and nostalgia on <a href="https://instagram.com/emptyyy_echoes" target="_blank">@emptyyy_echoes</a>. Words are my way of processing emotions.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>contact.sh</h2>
-            <div class="contact-content glass-card">
-                <p class="contact-intro">つながりましょう - Let's connect and build intelligent systems together</p>
-                <div class="contact-links">
-                    <a href="mailto:mehultotala21@gmail.com" class="contact-link neuro-card">email</a>
-                    <a href="https://github.com/Coffeempty" target="_blank" class="contact-link neuro-card">github</a>
-                    <a href="https://linkedin.com/in/mehultotala" target="_blank" class="contact-link neuro-card">linkedin</a>
-                    <a href="https://x.com/emptysaysstuff" target="_blank" class="contact-link neuro-card">twitter</a>
-                    <a href="https://instagram.com/mehultotala" target="_blank" class="contact-link neuro-card">instagram</a>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-content">
-                <p>© 2025 Mehul Totala <span class="accent-separator">◆</span> VJTI Mumbai</p>
-                <p class="footer-note">Built with dedication and ☕</p>
-            </div>
-        </footer>
+      <div class="footer-doodles">
+        <!-- Heart -->
+        <span class="footer-doodle-item">
+          <svg viewBox="0 0 36 32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M 18 28 Q 5 18 3 11 Q 1 3 8 1 Q 14 0 18 8 Q 22 0 28 1 Q 35 3 33 11 Q 31 18 18 28 Z"/>
+          </svg>
+        </span>
+        <!-- Checkered flag Easter egg -->
+        <span class="footer-doodle-item" style="opacity:0.18;">
+          <svg viewBox="0 0 46 50" width="40" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M 5 4 L 5 48"/>
+            <path d="M 5 4 Q 16 2 25 6 Q 34 10 44 8 L 42 28 Q 32 26 23 30 Q 14 34 5 32 Z"/>
+            <line x1="5"  y1="14" x2="43" y2="14" stroke-width="1.3"/>
+            <line x1="5"  y1="24" x2="41" y2="24" stroke-width="1.3"/>
+            <line x1="15" y1="4"  x2="15" y2="32" stroke-width="1.3"/>
+            <line x1="25" y1="4"  x2="25" y2="32" stroke-width="1.3"/>
+            <line x1="35" y1="4"  x2="34" y2="30" stroke-width="1.3"/>
+          </svg>
+        </span>
+        <!-- Stars -->
+        <span class="footer-doodle-item" style="transform:rotate(-5deg)">
+          <svg viewBox="0 0 50 28" width="48" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M 10 14 L 11.5 9.5 L 14 4 L 16.5 9.5 L 22 11 L 17 15 L 18 21 L 14 18 L 10 21 L 11 15 Z"/>
+            <path d="M 32 12 L 33 9 L 34.5 5 L 36 9 L 39 10 L 36 13 L 36.5 17 L 34.5 15 L 32 17 L 32.5 13 Z"/>
+          </svg>
+        </span>
+      </div>
 
     </div>
+  </footer>
 
-<script src="script.js"></script>
+  <!-- #33 was here -->
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

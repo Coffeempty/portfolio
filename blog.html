@@ -1,143 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mehul Totala - Blog">
-    <title>Blog | Mehul's Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Writing by Mehul Totala — essays, thoughts, and occasional 3am dispatches.">
+  <title>Writing — Mehul Totala</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Kalam:wght@300;400;700&family=Nunito:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <div class="container-wide">
-        <nav class="blog-nav">
-            <a href="index.html">./home</a>
-            <a href="index.html#about">./about</a>
-            <a href="index.html#skills">./skills</a>
-            <a href="index.html#projects">./projects</a>
-            <a href="index.html#blogs">./blogs</a>
-            <a href="index.html#talents">./talents</a>
-            <a href="index.html#contact">./contact</a>
-        </nav>
+  <!-- Paper grain -->
+  <svg class="paper-grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="paper-noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.45 0.8" numOctaves="5" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix"
+        values="0 0 0 0 0.48
+                0 0 0 0 0.38
+                0 0 0 0 0.28
+                0 0 0 0 0.13"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#paper-noise)"/>
+  </svg>
 
-        <section id="all-blogs">
-            <h2>blog_archive.json</h2>
-            <div class="blog-container">
-                <div class="blog-posts">
-                    <!-- Blog posts will be dynamically loaded here -->
-                </div>
-            </div>
-        </section>
+  <!-- Custom cursor -->
+  <div id="cursor-dot" aria-hidden="true"></div>
 
-        <footer>
-            <div class="footer-content">
-                <p>© 2025 Mehul Totala <span class="accent-separator">◆</span> VJTI Mumbai</p>
-                <p class="footer-note">Built with dedication and ☕</p>
-            </div>
-        </footer>
+  <!-- Nav -->
+  <nav class="blog-nav">
+    <a href="index.html" class="blog-nav-logo">MT</a>
+    <div class="blog-nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="mailto:mehultotala21@gmail.com">Connect</a>
+    </div>
+  </nav>
 
+  <div class="blog-page">
+
+    <div class="blog-page-header">
+      <h1 class="blog-page-title">Writing</h1>
+      <p class="blog-page-sub">essays, thoughts, occasional dispatches</p>
     </div>
 
-    <script>
-        const blogPosts = [
-            {
-                id: 1,
-                title: "Surviving Somewhere in Between",
-                date: "January 9, 2026",
-                excerpt: "a non ai writing piece that may or may not interest you"
-            }
-        ];
+    <div class="blog-posts-list">
+      <a href="blog_posts/surviving-between-polymath.html" class="post-entry">
+        <div class="post-entry-left">
+          <span class="post-entry-date">Jan 2026</span>
+        </div>
+        <div class="post-entry-right">
+          <span class="post-entry-title">Surviving Somewhere in Between</span>
+          <span class="post-entry-excerpt">On being a polymath, the chaos of curiosity, and trying to prioritise the mess — written at 3am, meant for future me.</span>
+        </div>
+        <span class="post-entry-arrow">→</span>
+      </a>
+    </div>
 
-        function renderBlogPosts() {
-            const blogContainer = document.querySelector('.blog-posts');
-            
-            if (!blogContainer) return;
-            
-            blogContainer.innerHTML = '';
-            
-            blogPosts.forEach(post => {
-                const blogPostElement = document.createElement('div');
-                blogPostElement.className = 'blog-post glass-card';
-                
-                blogPostElement.innerHTML = `
-                    <h3>${post.title}</h3>
-                    <span class="date">${post.date}</span>
-                    <p>${post.excerpt}</p>
-                `;
-                
-                blogPostElement.addEventListener('click', () => {
-                    if(post.id === 1) {
-                        window.location.href = 'blog_posts/surviving-between-polymath.html';
-                    }
-                });
-                
-                blogContainer.appendChild(blogPostElement);
-            });
-        }
+  </div>
 
-        document.addEventListener('DOMContentLoaded', renderBlogPosts);
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <p class="footer-tagline">made slowly, with intention.</p>
+          <p class="footer-copy">© <span id="footer-year">2026</span> Mehul Totala</p>
+        </div>
+        <div class="footer-right">
+          <div class="footer-links">
+            <a href="mailto:mehultotala21@gmail.com" class="footer-link">email</a>
+            <a href="https://github.com/Coffeempty"       target="_blank" rel="noopener" class="footer-link">github</a>
+            <a href="https://linkedin.com/in/mehultotala" target="_blank" rel="noopener" class="footer-link">linkedin</a>
+            <a href="https://x.com/emptysaysstuff"        target="_blank" rel="noopener" class="footer-link">twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-        
-        // Name typing effect
-        const names = [
-            { text: 'Blog', lang: 'en' },
-            { text: 'ブログ', lang: 'jp' }
-        ];
-
-        let currentNameIndex = 0;
-        let currentCharIndex = 0;
-        let isDeleting = false;
-        let typingDelay = 100;
-
-        const nameElement = document.querySelector('.name-cycle');
-
-        function typeNameEffect() {
-            if (!nameElement) return;
-            
-            const currentName = names[currentNameIndex];
-            
-            if (isDeleting) {
-                currentCharIndex--;
-                nameElement.textContent = currentName.text.substring(0, currentCharIndex);
-                typingDelay = 30;
-                
-                if (currentCharIndex === 0) {
-                    isDeleting = false;
-                    currentNameIndex = (currentNameIndex + 1) % names.length;
-                    typingDelay = 200;
-                }
-            } else {
-                currentCharIndex++;
-                nameElement.textContent = currentName.text.substring(0, currentCharIndex);
-                typingDelay = 80;
-                
-                if (currentCharIndex === currentName.text.length) {
-                    isDeleting = true;
-                    typingDelay = 2000;
-                }
-            }
-            
-            setTimeout(typeNameEffect, typingDelay);
-        }
-
-        if (nameElement) {
-            nameElement.textContent = '';
-            setTimeout(typeNameEffect, 800);
-        }
-    </script>
+  <script src="script.js"></script>
+  <script>
+    const y = document.getElementById('footer-year');
+    if (y) y.textContent = new Date().getFullYear();
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '0';
+      requestAnimationFrame(() => {
+        document.body.style.transition = 'opacity 0.8s ease';
+        document.body.style.opacity = '1';
+      });
+    });
+  </script>
 </body>
 </html>
