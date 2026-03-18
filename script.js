@@ -90,45 +90,56 @@ vec3 palette(float t) {
   return col;
 }
 
-uniform vec2  uClickUv;   /* click UV 0..1, (-1,-1) if none */
-uniform float uClickTime; /* shader-time at last click      */
+uniform vec2  uClickUv;
+uniform float uClickTime;
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  vec2 p  = vec2(uv.x * (uRes.x / uRes.y), uv.y); /* aspect-correct */
-  float t = uTime * 0.026; /* slow drift */
+  vec2  uv  = gl_FragCoord.xy / uRes;
+  float asp = uRes.x / uRes.y;
+  vec2  p   = vec2(uv.x * asp, uv.y);
+  float T   = uTime;
 
-  /* Two washes at different scales for depth */
-  float n  = wfbm(p * 1.1,  t);
-  float n2 = wfbm(p * 0.62 + vec2(3.7, 2.1), t * 0.50);
-  float v  = mix(n, n2, 0.38);
+  /* Three independent layers — each with its own oscillating drift   */
+  /* so they move through each other rather than all going one way.   */
+  float d1 = T * 0.034 + sin(T * 0.11) * 0.65;
+  float d2 = T * 0.021 + cos(T * 0.08) * 0.80;
+  float d3 = T * 0.015 + sin(T * 0.13 + 1.6) * 0.55;
 
-  /* Wet-bead edge darkening: peaks where paint regions meet */
-  float bead = 3.8 * v * (1.0 - v);
+  float n1 = wfbm(p * 1.10,                     d1);
+  float n2 = wfbm(p * 0.72 + vec2(3.7, 2.1),   d2);
+  float n3 = wfbm(p * 1.60 + vec2(1.2, 6.4),   d3);
+  float v  = n1 * 0.44 + n2 * 0.33 + n3 * 0.23;
 
-  /* Paper granulation */
-  float grain = (vnoise(uv * 180.0) - 0.5) * 0.013;
+  /* Stretch the 0.3-0.7 fBm range across all 6 palette colours.     */
+  /* Position offset ensures different screen areas use different hues.*/
+  float palIdx = fract(v * 2.4 + p.x * 0.11 + p.y * 0.08
+                       + sin(T * 0.04) * 0.14);
 
-  vec3 col = palette(v);
-  col = mix(col, col * 0.52, bead * 0.55);
+  float bead  = 3.8 * v * (1.0 - v);
+  float grain = (vnoise(uv * 180.0) - 0.5) * 0.012;
+
+  vec3 col = palette(palIdx);
+  /* Boost saturation — pull away from grey */
+  float lum = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(vec3(lum), col, 1.40);
+  col = mix(col, col * 0.50, bead * 0.50);
   col = clamp(col + grain, 0.0, 1.0);
 
-  float alpha = smoothstep(0.28, 0.60, v) * 0.52 + bead * 0.10;
+  float alpha = smoothstep(0.20, 0.52, v) * 0.76 + bead * 0.14;
 
-  /* Click bloom — pigment drop on wet paper */
+  /* Click bloom */
   float clickAge = uTime - uClickTime;
   float guard    = step(0.0, uClickTime) * step(clickAge, 3.5);
   if (guard > 0.0) {
-    float asp      = uRes.x / uRes.y;
     vec2  clickP   = vec2(uClickUv.x * asp, uClickUv.y);
     float dist     = length(p - clickP);
-    float bloom    = exp(-dist * 3.8) * exp(-clickAge * 1.1);
-    vec3  clickCol = palette(uClickUv.x * 0.55 + uClickUv.y * 0.25 + 0.12);
-    col   = mix(col,   clickCol, bloom * 0.55);
-    alpha = clamp(alpha + bloom * 0.42, 0.0, 0.82);
+    float bloom    = exp(-dist * 3.6) * exp(-clickAge * 1.0);
+    vec3  clickCol = palette(fract(uClickUv.x * 0.6 + uClickUv.y * 0.3 + 0.1));
+    col   = mix(col, clickCol, bloom * 0.65);
+    alpha = clamp(alpha + bloom * 0.50, 0.0, 0.90);
   }
 
-  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.62));
+  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.82));
 }
 `;
 
@@ -177,8 +188,8 @@ void main() {
 
   // ── Resize ─────────────────────────────────────────────
   function resize() {
-    const W = Math.max(1, Math.round(wrap.offsetWidth  * 0.5));
-    const H = Math.max(1, Math.round(wrap.offsetHeight * 0.5));
+    const W = Math.max(1, Math.round(wrap.offsetWidth  * 0.65));
+    const H = Math.max(1, Math.round(wrap.offsetHeight * 0.65));
     canvas.width  = W;
     canvas.height = H;
     gl.viewport(0, 0, W, H);
