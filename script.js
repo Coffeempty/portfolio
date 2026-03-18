@@ -82,7 +82,7 @@ vec3 palette(float t) {
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p  = vec2(uv.x * (uRes.x / uRes.y), uv.y); /* aspect-correct */
-  float t = uTime * 0.014; /* glacially slow drift */
+  float t = uTime * 0.026; /* slow drift */
 
   /* Two washes at different scales for depth */
   float n  = wfbm(p * 1.1,  t);
@@ -98,12 +98,12 @@ void main() {
   float grain = (vnoise(uv * 180.0) - 0.5) * 0.013;
 
   vec3 col = palette(v);
-  col = mix(col, col * 0.58, bead * 0.44); /* darken at edges */
+  col = mix(col, col * 0.52, bead * 0.55); /* darken at edges */
   col = clamp(col + grain, 0.0, 1.0);
 
-  /* Alpha: only paint regions are opaque; paper shows through */
-  float alpha = smoothstep(0.30, 0.64, v) * 0.28 + bead * 0.05;
-  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.33));
+  /* Alpha: paint regions opaque, paper shows through */
+  float alpha = smoothstep(0.28, 0.60, v) * 0.52 + bead * 0.10;
+  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.58));
 }
 `;
 

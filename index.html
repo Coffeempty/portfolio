@@ -77,27 +77,34 @@
 
         <div class="projects">
 
-          <!-- Marty-100 -->
+          <!-- jax-cce -->
           <article class="project-card reveal">
             <div class="project-media">
               <div class="project-placeholder">
-                <div class="placeholder-gradient"></div>
+                <div class="placeholder-gradient" style="--ph-color:100,120,160"></div>
               </div>
             </div>
             <div class="project-info">
               <div class="project-meta">
                 <div class="project-tags">
-                  <span class="tag">Robotics</span>
-                  <span class="tag">RL</span>
-                  <span class="tag">Vision</span>
+                  <span class="tag">JAX</span>
+                  <span class="tag">XLA</span>
+                  <span class="tag">PyPI</span>
                 </div>
-                <span class="project-status">in progress</span>
+                <span class="project-year">2025</span>
               </div>
-              <h3 class="project-title">Marty-100</h3>
-              <p class="project-desc">Autonomous table-tennis robot using the SO100 6DoF arm — model-based control, reinforcement learning, and real-time computer vision working together to return the ball.</p>
+              <h3 class="project-title">jax-cce</h3>
+              <p class="project-desc">Published a Python package that cuts memory usage by 97% for the most expensive step in LLM training. Cross-entropy loss in models like Llama-3 creates a 4GB logits tensor that gets used once and thrown away — jax-cce tiles over vocabulary chunks instead, never materialising the full tensor. Same math, same gradients. Reviewed by a JAX core maintainer at Google DeepMind.</p>
               <div class="project-tags-bottom">
-                <span class="tag-sm">Model-Based Control</span>
-                <span class="tag-sm">Robot Learning</span>
+                <span class="tag-sm">custom_vjp</span>
+                <span class="tag-sm">lax.scan</span>
+                <span class="tag-sm">FlashAttention trick</span>
+              </div>
+              <div class="project-links" style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+                <a href="https://github.com/Coffeempty/jax-cce" target="_blank" rel="noopener" class="proj-link">GitHub</a>
+                <a href="https://pypi.org/project/jax-cce/" target="_blank" rel="noopener" class="proj-link">PyPI</a>
+                <a href="https://arxiv.org/abs/2411.09009" target="_blank" rel="noopener" class="proj-link">Paper</a>
+                <a href="https://github.com/jax-ml/jax/pull/35915" target="_blank" rel="noopener" class="proj-link">JAX PR</a>
               </div>
             </div>
           </article>
