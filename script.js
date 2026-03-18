@@ -69,17 +69,17 @@ float wfbm(vec2 p, float t) {
   return fbm(p + 2.0 * r + t * 0.08);
 }
 
-/* ---- lively watercolor palette --------------------------  */
-/* cobalt blue · cerulean · sage · terracotta · ochre · violet */
+/* ---- clean watercolor pigments --------------------------  */
+/* ultramarine · sky · mint · coral · saffron · lavender      */
 vec3 palette(float t) {
   t = fract(t);
   float s = t * 6.0;
-  vec3 c0 = vec3(0.18, 0.38, 0.80); /* cobalt blue    */
-  vec3 c1 = vec3(0.10, 0.62, 0.74); /* cerulean       */
-  vec3 c2 = vec3(0.35, 0.64, 0.38); /* sage green     */
-  vec3 c3 = vec3(0.74, 0.34, 0.20); /* terracotta     */
-  vec3 c4 = vec3(0.82, 0.58, 0.18); /* warm ochre     */
-  vec3 c5 = vec3(0.54, 0.28, 0.66); /* dusty violet   */
+  vec3 c0 = vec3(0.14, 0.36, 0.90); /* ultramarine    */
+  vec3 c1 = vec3(0.08, 0.68, 0.88); /* sky / peacock  */
+  vec3 c2 = vec3(0.18, 0.82, 0.62); /* fresh mint     */
+  vec3 c3 = vec3(0.98, 0.42, 0.48); /* coral / rose   */
+  vec3 c4 = vec3(0.99, 0.76, 0.10); /* saffron yellow */
+  vec3 c5 = vec3(0.72, 0.38, 0.92); /* bright lavender*/
   vec3 col = c0;
   col = mix(col, c1, clamp(s - 0.0, 0.0, 1.0));
   col = mix(col, c2, clamp(s - 1.0, 0.0, 1.0));
@@ -121,7 +121,7 @@ void main() {
   vec3 col = palette(palIdx);
   /* Boost saturation — pull away from grey */
   float lum = dot(col, vec3(0.299, 0.587, 0.114));
-  col = mix(vec3(lum), col, 1.40);
+  col = mix(vec3(lum), col, 1.15);
   col = mix(col, col * 0.50, bead * 0.50);
   col = clamp(col + grain, 0.0, 1.0);
 

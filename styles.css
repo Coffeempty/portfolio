@@ -271,7 +271,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--body);
   font-size: clamp(15px, 1.4vw, 17px);
   font-weight: 400;
-  color: var(--ink-light);
+  color: var(--ink-mid);
   line-height: 1.85;
   max-width: 460px;
   animation: hero-rise 1.1s var(--ease-out) 0.22s both;
