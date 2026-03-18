@@ -35,51 +35,71 @@ void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
 precision highp float;
 uniform float uTime;
 uniform vec2  uRes;
+uniform vec2  uClickUv;
+uniform float uClickTime;
 
-/* ---- value noise ---------------------------------------- */
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+/* ---- Perlin gradient noise ------------------------------ */
+/* Quintic smoothstep + gradient dot products give smooth,   */
+/* non-blocky shapes compared to value noise.               */
+vec2 ghash(vec2 p) {
+  p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+  return -1.0 + 2.0 * fract(sin(p) * 43758.5453);
 }
-float vnoise(vec2 p) {
+float pnoise(vec2 p) {
   vec2 i = floor(p), f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i),           hash(i + vec2(1,0)), u.x),
-             mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
+  /* Quintic: smoother C2-continuous interpolation */
+  vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+  return mix(
+    mix(dot(ghash(i),             f),
+        dot(ghash(i + vec2(1,0)), f - vec2(1,0)), u.x),
+    mix(dot(ghash(i + vec2(0,1)), f - vec2(0,1)),
+        dot(ghash(i + vec2(1,1)), f - vec2(1,1)), u.x), u.y
+  ) * 0.5 + 0.5;
 }
 
-/* ---- fractional Brownian motion ------------------------- */
+/* ---- fractional Brownian motion (Perlin-based) ---------- */
 float fbm(vec2 p) {
   float v = 0.0, a = 0.5;
   for (int i = 0; i < 5; i++) {
-    v += a * vnoise(p);
+    v += a * pnoise(p);
     p  = p * 2.1 + vec2(1.7, 9.2);
     a *= 0.48;
   }
   return v;
 }
 
-/* ---- two-layer domain-warped fBm ------------------------ */
-/* Warping creates the organic, blooming shapes real          */
-/* watercolor makes when wet pigment spreads on wet paper.   */
+/* ---- domain-warped fBm ---------------------------------- */
 float wfbm(vec2 p, float t) {
-  vec2 q = vec2(fbm(p + t * 0.28),
-                fbm(p + vec2(5.2, 1.3) + t * 0.28));
-  vec2 r = vec2(fbm(p + 1.6 * q + vec2(1.7, 9.2) + t * 0.18),
-                fbm(p + 1.6 * q + vec2(8.3, 2.8) + t * 0.18));
-  return fbm(p + 2.0 * r + t * 0.08);
+  vec2 q = vec2(fbm(p + t * 0.24),
+                fbm(p + vec2(5.2, 1.3) + t * 0.24));
+  vec2 r = vec2(fbm(p + 1.5 * q + vec2(1.7, 9.2) + t * 0.16),
+                fbm(p + 1.5 * q + vec2(8.3, 2.8) + t * 0.16));
+  return fbm(p + 1.8 * r + t * 0.07);
 }
 
-/* ---- clean watercolor pigments --------------------------  */
-/* ultramarine · sky · mint · coral · saffron · lavender      */
+/* ---- coarse paper fiber texture ------------------------- */
+/* Long horizontal + vertical fibers at multiple scales,     */
+/* mimicking the woven structure of cold-press watercolor    */
+/* paper. Only visible in low-alpha areas (bare paper).      */
+float paperTex(vec2 uv) {
+  float hf = pnoise(vec2(uv.x * 340.0, uv.y * 3.0)) * 0.42;
+  float vf = pnoise(vec2(uv.x * 2.8,   uv.y * 250.0)) * 0.28;
+  float cg = pnoise(uv * 52.0)  * 0.18;
+  float fg = pnoise(uv * 185.0) * 0.12;
+  return hf + vf + cg + fg;
+}
+
+/* ---- watercolor pigments -------------------------------- */
+/* ultramarine · sky · fuchsia · coral · saffron · lavender  */
 vec3 palette(float t) {
   t = fract(t);
   float s = t * 6.0;
-  vec3 c0 = vec3(0.14, 0.36, 0.90); /* ultramarine    */
-  vec3 c1 = vec3(0.08, 0.68, 0.88); /* sky / peacock  */
-  vec3 c2 = vec3(0.92, 0.20, 0.68); /* fuchsia / hot pink */
-  vec3 c3 = vec3(0.98, 0.42, 0.48); /* coral / rose   */
-  vec3 c4 = vec3(0.99, 0.76, 0.10); /* saffron yellow */
-  vec3 c5 = vec3(0.72, 0.38, 0.92); /* bright lavender*/
+  vec3 c0 = vec3(0.14, 0.36, 0.90);
+  vec3 c1 = vec3(0.08, 0.68, 0.88);
+  vec3 c2 = vec3(0.92, 0.20, 0.68);
+  vec3 c3 = vec3(0.98, 0.42, 0.48);
+  vec3 c4 = vec3(0.99, 0.76, 0.10);
+  vec3 c5 = vec3(0.72, 0.38, 0.92);
   vec3 col = c0;
   col = mix(col, c1, clamp(s - 0.0, 0.0, 1.0));
   col = mix(col, c2, clamp(s - 1.0, 0.0, 1.0));
@@ -90,53 +110,63 @@ vec3 palette(float t) {
   return col;
 }
 
-uniform vec2  uClickUv;
-uniform float uClickTime;
-
 void main() {
   vec2  uv  = gl_FragCoord.xy / uRes;
   float asp = uRes.x / uRes.y;
   vec2  p   = vec2(uv.x * asp, uv.y);
   float T   = uTime;
 
-  /* Three independent layers — each with its own oscillating drift   */
-  /* so they move through each other rather than all going one way.   */
-  float d1 = T * 0.034 + sin(T * 0.11) * 0.65;
-  float d2 = T * 0.021 + cos(T * 0.08) * 0.80;
-  float d3 = T * 0.015 + sin(T * 0.13 + 1.6) * 0.55;
+  /* Pure oscillations — no persistent drift, so layers breathe */
+  /* back and forth rather than steadily marching one direction. */
+  float d1 = sin(T * 0.031 + 0.0) * 0.55 + cos(T * 0.019 + 1.3) * 0.38;
+  float d2 = cos(T * 0.027 + 2.1) * 0.62 + sin(T * 0.023 + 0.7) * 0.44;
+  float d3 = sin(T * 0.022 + 4.2) * 0.48 + cos(T * 0.033 + 2.8) * 0.36;
 
-  float n1 = wfbm(p * 1.10,                     d1);
-  float n2 = wfbm(p * 0.72 + vec2(3.7, 2.1),   d2);
-  float n3 = wfbm(p * 1.60 + vec2(1.2, 6.4),   d3);
+  float n1 = wfbm(p * 1.10,                   d1);
+  float n2 = wfbm(p * 0.72 + vec2(3.7, 2.1), d2);
+  float n3 = wfbm(p * 1.60 + vec2(1.2, 6.4), d3);
   float v  = n1 * 0.44 + n2 * 0.33 + n3 * 0.23;
 
-  /* Stretch the 0.3-0.7 fBm range across all 6 palette colours.     */
-  /* Position offset ensures different screen areas use different hues.*/
   float palIdx = fract(v * 2.4 + p.x * 0.11 + p.y * 0.08
                        + sin(T * 0.04) * 0.14);
 
   float bead  = 3.8 * v * (1.0 - v);
-  float grain = (vnoise(uv * 180.0) - 0.5) * 0.012;
+
+  /* Paper fiber texture — visible as grain across the canvas */
+  float paper = paperTex(uv);
+  float grain = (paper - 0.5) * 0.016;
 
   vec3 col = palette(palIdx);
-  /* Boost saturation — pull away from grey */
   float lum = dot(col, vec3(0.299, 0.587, 0.114));
   col = mix(vec3(lum), col, 1.15);
   col = mix(col, col * 0.50, bead * 0.50);
+  /* Paper fibers show faintly through the pigment */
+  col = col * (0.94 + paper * 0.09);
   col = clamp(col + grain, 0.0, 1.0);
 
   float alpha = smoothstep(0.20, 0.52, v) * 0.76 + bead * 0.14;
 
-  /* Click bloom */
+  /* Click bloom — spreading pool + expanding capillary ring */
   float clickAge = uTime - uClickTime;
-  float guard    = step(0.0, uClickTime) * step(clickAge, 3.5);
+  float guard    = step(0.0, uClickTime) * step(clickAge, 4.2);
   if (guard > 0.0) {
-    vec2  clickP   = vec2(uClickUv.x * asp, uClickUv.y);
-    float dist     = length(p - clickP);
-    float bloom    = exp(-dist * 3.6) * exp(-clickAge * 1.0);
+    vec2  clickP = vec2(uClickUv.x * asp, uClickUv.y);
+    float dist   = length(p - clickP);
+
+    /* Pool: starts small, spreads outward, fades slowly */
+    float poolR = 0.07 + clickAge * 0.052;
+    float pool  = exp(-dist / max(poolR, 0.001) * 2.2) * exp(-clickAge * 0.88);
+
+    /* Ring: capillary water racing ahead of pigment */
+    float ringR = clickAge * 0.15;
+    float ring  = exp(-pow((dist - ringR) * 13.0, 2.0))
+                  * exp(-clickAge * 1.3)
+                  * smoothstep(0.04, 0.14, clickAge);
+
+    float bloom    = pool * 0.70 + ring * 0.55;
     vec3  clickCol = palette(fract(uClickUv.x * 0.6 + uClickUv.y * 0.3 + 0.1));
-    col   = mix(col, clickCol, bloom * 0.65);
-    alpha = clamp(alpha + bloom * 0.50, 0.0, 0.90);
+    col   = mix(col, clickCol, bloom * 0.58);
+    alpha = clamp(alpha + bloom * 0.44, 0.0, 0.90);
   }
 
   gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.82));
