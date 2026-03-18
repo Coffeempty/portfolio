@@ -76,7 +76,7 @@ vec3 palette(float t) {
   float s = t * 6.0;
   vec3 c0 = vec3(0.14, 0.36, 0.90); /* ultramarine    */
   vec3 c1 = vec3(0.08, 0.68, 0.88); /* sky / peacock  */
-  vec3 c2 = vec3(0.18, 0.82, 0.62); /* fresh mint     */
+  vec3 c2 = vec3(0.92, 0.20, 0.68); /* fuchsia / hot pink */
   vec3 c3 = vec3(0.98, 0.42, 0.48); /* coral / rose   */
   vec3 c4 = vec3(0.99, 0.76, 0.10); /* saffron yellow */
   vec3 c5 = vec3(0.72, 0.38, 0.92); /* bright lavender*/
