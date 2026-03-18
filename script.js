@@ -69,15 +69,29 @@ float wfbm(vec2 p, float t) {
   return fbm(p + 2.0 * r + t * 0.08);
 }
 
-/* ---- cosine palette — warm watercolor pigments ---------- */
-/* terracotta · ochre · sage · dusty slate                   */
+/* ---- lively watercolor palette --------------------------  */
+/* cobalt blue · cerulean · sage · terracotta · ochre · violet */
 vec3 palette(float t) {
-  vec3 a = vec3(0.68, 0.50, 0.38);
-  vec3 b = vec3(0.18, 0.10, 0.07);
-  vec3 c = vec3(1.00, 0.85, 0.65);
-  vec3 d = vec3(0.05, 0.12, 0.20);
-  return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
+  t = fract(t);
+  float s = t * 6.0;
+  vec3 c0 = vec3(0.18, 0.38, 0.80); /* cobalt blue    */
+  vec3 c1 = vec3(0.10, 0.62, 0.74); /* cerulean       */
+  vec3 c2 = vec3(0.35, 0.64, 0.38); /* sage green     */
+  vec3 c3 = vec3(0.74, 0.34, 0.20); /* terracotta     */
+  vec3 c4 = vec3(0.82, 0.58, 0.18); /* warm ochre     */
+  vec3 c5 = vec3(0.54, 0.28, 0.66); /* dusty violet   */
+  vec3 col = c0;
+  col = mix(col, c1, clamp(s - 0.0, 0.0, 1.0));
+  col = mix(col, c2, clamp(s - 1.0, 0.0, 1.0));
+  col = mix(col, c3, clamp(s - 2.0, 0.0, 1.0));
+  col = mix(col, c4, clamp(s - 3.0, 0.0, 1.0));
+  col = mix(col, c5, clamp(s - 4.0, 0.0, 1.0));
+  col = mix(col, c0, clamp(s - 5.0, 0.0, 1.0));
+  return col;
 }
+
+uniform vec2  uClickUv;   /* click UV 0..1, (-1,-1) if none */
+uniform float uClickTime; /* shader-time at last click      */
 
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
@@ -89,21 +103,32 @@ void main() {
   float n2 = wfbm(p * 0.62 + vec2(3.7, 2.1), t * 0.50);
   float v  = mix(n, n2, 0.38);
 
-  /* Wet-bead edge darkening: 3.8·v·(1-v) peaks at v=0.5   */
-  /* which is exactly where paint regions meet — darkens    */
-  /* the boundary like pigment accumulating at a wet edge.  */
+  /* Wet-bead edge darkening: peaks where paint regions meet */
   float bead = 3.8 * v * (1.0 - v);
 
-  /* Paper granulation — high-freq noise, very subtle */
+  /* Paper granulation */
   float grain = (vnoise(uv * 180.0) - 0.5) * 0.013;
 
   vec3 col = palette(v);
-  col = mix(col, col * 0.52, bead * 0.55); /* darken at edges */
+  col = mix(col, col * 0.52, bead * 0.55);
   col = clamp(col + grain, 0.0, 1.0);
 
-  /* Alpha: paint regions opaque, paper shows through */
   float alpha = smoothstep(0.28, 0.60, v) * 0.52 + bead * 0.10;
-  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.58));
+
+  /* Click bloom — pigment drop on wet paper */
+  float clickAge = uTime - uClickTime;
+  float guard    = step(0.0, uClickTime) * step(clickAge, 3.5);
+  if (guard > 0.0) {
+    float asp      = uRes.x / uRes.y;
+    vec2  clickP   = vec2(uClickUv.x * asp, uClickUv.y);
+    float dist     = length(p - clickP);
+    float bloom    = exp(-dist * 3.8) * exp(-clickAge * 1.1);
+    vec3  clickCol = palette(uClickUv.x * 0.55 + uClickUv.y * 0.25 + 0.12);
+    col   = mix(col,   clickCol, bloom * 0.55);
+    alpha = clamp(alpha + bloom * 0.42, 0.0, 0.82);
+  }
+
+  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.62));
 }
 `;
 
@@ -137,17 +162,21 @@ void main() {
   gl.enableVertexAttribArray(aloc);
   gl.vertexAttribPointer(aloc, 2, gl.FLOAT, false, 0, 0);
 
-  const uTime = gl.getUniformLocation(prog, 'uTime');
-  const uRes  = gl.getUniformLocation(prog, 'uRes');
+  const uTime      = gl.getUniformLocation(prog, 'uTime');
+  const uRes       = gl.getUniformLocation(prog, 'uRes');
+  const uClickUv   = gl.getUniformLocation(prog, 'uClickUv');
+  const uClickTime = gl.getUniformLocation(prog, 'uClickTime');
 
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   gl.clearColor(0, 0, 0, 0);
 
+  /* No click yet */
+  gl.uniform2f(uClickUv,   -1.0, -1.0);
+  gl.uniform1f(uClickTime, -99.0);
+
   // ── Resize ─────────────────────────────────────────────
   function resize() {
-    // Render at half resolution — bilinear browser upscale
-    // softens the output exactly like watercolor diffuses on paper
     const W = Math.max(1, Math.round(wrap.offsetWidth  * 0.5));
     const H = Math.max(1, Math.round(wrap.offsetHeight * 0.5));
     canvas.width  = W;
@@ -161,6 +190,8 @@ void main() {
 
   // ── Render loop (pause when hero off-screen) ───────────
   let visible = true;
+  let lastTs  = 0;
+
   new IntersectionObserver(entries => {
     visible = entries[0].isIntersecting;
   }, { threshold: 0 }).observe(wrap);
@@ -168,10 +199,22 @@ void main() {
   function draw(ts) {
     requestAnimationFrame(draw);
     if (!visible) return;
+    lastTs = ts * 0.001;
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform1f(uTime, ts * 0.001);
+    gl.uniform1f(uTime, lastTs);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
+
+  // ── Click bloom ────────────────────────────────────────
+  // Spawns a pigment-drop bloom at the click point.
+  // Subtle: fades in ~3s, colour picked from the palette.
+  wrap.addEventListener('mousedown', (e) => {
+    const rect = wrap.getBoundingClientRect();
+    const u = (e.clientX - rect.left)  / rect.width;
+    const v = 1.0 - (e.clientY - rect.top) / rect.height; /* flip Y for GL */
+    gl.uniform2f(uClickUv,   u, v);
+    gl.uniform1f(uClickTime, lastTs);
+  });
 
   requestAnimationFrame(draw);
 })();
