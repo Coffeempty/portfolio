@@ -206,9 +206,9 @@ void main() {
   }
 
   // ── Click bloom ────────────────────────────────────────
-  // Spawns a pigment-drop bloom at the click point.
-  // Subtle: fades in ~3s, colour picked from the palette.
-  wrap.addEventListener('mousedown', (e) => {
+  // wrap has pointer-events:none so listen on the hero section.
+  const hero = document.getElementById('hero') || wrap.parentElement;
+  hero.addEventListener('mousedown', (e) => {
     const rect = wrap.getBoundingClientRect();
     const u = (e.clientX - rect.left)  / rect.width;
     const v = 1.0 - (e.clientY - rect.top) / rect.height; /* flip Y for GL */
