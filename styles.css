@@ -99,6 +99,8 @@ a { color: inherit; text-decoration: none; }
 
 #hero-canvas-wrap canvas {
   display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* ── 6. CURSOR — small dot only ── */

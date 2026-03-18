@@ -4,136 +4,176 @@
 
 'use strict';
 
-// ── WATERCOLOR WAVES (p5.js) ────────────────────────────────
+// ── WATERCOLOR HERO — WebGL GLSL shader ────────────────────
+// Domain-warped fBm noise → organic watercolor wash shapes.
+// Rendered at 0.5× resolution; browser bilinear upscale adds
+// natural softness that mirrors how watercolor diffuses on paper.
 
-(function initWaves() {
+(function initWatercolor() {
   const wrap = document.getElementById('hero-canvas-wrap');
-  if (!wrap || typeof p5 === 'undefined') return;
+  if (!wrap) return;
 
-  new p5((sk) => {
+  const canvas = document.createElement('canvas');
+  wrap.appendChild(canvas);
 
-    // Warm watercolor pigments — same palette as the design system
-    const PALETTE = [
-      [184,  92,  58],   // terracotta
-      [196, 140,  56],   // ochre
-      [120, 152, 100],   // sage
-      [172, 114,  78],   // sienna
-      [192, 148, 112],   // dusty sand
-      [100, 130, 150],   // muted slate
-    ];
+  const gl = canvas.getContext('webgl', {
+    alpha: true,
+    premultipliedAlpha: false,
+    antialias: false,
+    powerPreference: 'low-power',
+  });
+  if (!gl) return;
 
-    let waves = [];
-    let nextIn = 90;   // frames until next wave appears
+  // ── Vertex shader (pass-through quad) ─────────────────
+  const VERT = `
+attribute vec2 a_pos;
+void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+`;
 
-    // ── Wave ──────────────────────────────────────────────
-    // A broad horizontal band whose top and bottom edges are
-    // driven by Perlin noise — drawn in multiple semi-transparent
-    // passes to build up the watercolor layering effect.
-    class Wave {
-      constructor() {
-        this.y          = sk.random(sk.height * 0.06, sk.height * 0.94);
-        this.amplitude  = sk.random(14, 42);
-        this.thickness  = sk.random(28, 80);
-        this.noiseOff   = sk.random(3000);
-        this.noiseScale = sk.random(0.004, 0.009);
-        this.timeScale  = sk.random(0.0006, 0.0015);
-        this.col        = sk.random(PALETTE);
-        this.maxAlpha   = sk.random(9, 22);   // out of 255 — intentionally faint
-        this.alpha      = 0;
-        this.fadeIn     = sk.random(0.10, 0.25);
-        this.fadeOut    = sk.random(0.05, 0.12);
-        this.holdMax    = sk.random(260, 550); // frames at full opacity
-        this.held       = 0;
-        this.phase      = 'in';
-        this.passes     = sk.floor(sk.random(3, 7));
-      }
+  // ── Fragment shader ────────────────────────────────────
+  const FRAG = `
+precision highp float;
+uniform float uTime;
+uniform vec2  uRes;
 
-      // Returns the Y position of one edge at a given X,
-      // with noise-driven irregularity different per pass.
-      _edgeY(x, top, pass, t) {
-        const n = sk.noise(
-          this.noiseOff + x * this.noiseScale + pass * 280,
-          t * this.timeScale + pass * 0.08
-        );
-        const base  = this.y + Math.sin(x * 0.005 + this.noiseOff * 0.015) * this.amplitude;
-        const half  = this.thickness * 0.5;
-        const jitter = (n - 0.5) * this.thickness * 0.45;
-        return top ? base - half + jitter : base + half + jitter;
-      }
+/* ---- value noise ---------------------------------------- */
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+float vnoise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i),           hash(i + vec2(1,0)), u.x),
+             mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
+}
 
-      update() {
-        if (this.phase === 'in') {
-          this.alpha = Math.min(this.alpha + this.fadeIn, this.maxAlpha);
-          if (this.alpha >= this.maxAlpha) this.phase = 'hold';
-        } else if (this.phase === 'hold') {
-          if (++this.held >= this.holdMax) this.phase = 'out';
-        } else {
-          this.alpha -= this.fadeOut;
-        }
-      }
+/* ---- fractional Brownian motion ------------------------- */
+float fbm(vec2 p) {
+  float v = 0.0, a = 0.5;
+  for (int i = 0; i < 5; i++) {
+    v += a * vnoise(p);
+    p  = p * 2.1 + vec2(1.7, 9.2);
+    a *= 0.48;
+  }
+  return v;
+}
 
-      draw(t) {
-        if (this.alpha < 0.5) return;
-        const [r, g, b] = this.col;
-        const step = 11;
+/* ---- two-layer domain-warped fBm ------------------------ */
+/* Warping creates the organic, blooming shapes real          */
+/* watercolor makes when wet pigment spreads on wet paper.   */
+float wfbm(vec2 p, float t) {
+  vec2 q = vec2(fbm(p + t * 0.28),
+                fbm(p + vec2(5.2, 1.3) + t * 0.28));
+  vec2 r = vec2(fbm(p + 1.6 * q + vec2(1.7, 9.2) + t * 0.18),
+                fbm(p + 1.6 * q + vec2(8.3, 2.8) + t * 0.18));
+  return fbm(p + 2.0 * r + t * 0.08);
+}
 
-        for (let p = 0; p < this.passes; p++) {
-          const a = this.alpha * (1 - p * 0.13);
-          if (a < 0.5) continue;
+/* ---- cosine palette — warm watercolor pigments ---------- */
+/* terracotta · ochre · sage · dusty slate                   */
+vec3 palette(float t) {
+  vec3 a = vec3(0.68, 0.50, 0.38);
+  vec3 b = vec3(0.18, 0.10, 0.07);
+  vec3 c = vec3(1.00, 0.85, 0.65);
+  vec3 d = vec3(0.05, 0.12, 0.20);
+  return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
+}
 
-          sk.fill(r, g, b, a);
-          sk.noStroke();
-          sk.beginShape();
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  vec2 p  = vec2(uv.x * (uRes.x / uRes.y), uv.y); /* aspect-correct */
+  float t = uTime * 0.014; /* glacially slow drift */
 
-          // Top edge — left to right
-          for (let x = -step; x <= sk.width + step; x += step) {
-            sk.curveVertex(x, this._edgeY(x, true, p, t));
-          }
-          // Bottom edge — right to left (closes the shape)
-          for (let x = sk.width + step; x >= -step; x -= step) {
-            sk.curveVertex(x, this._edgeY(x, false, p, t));
-          }
+  /* Two washes at different scales for depth */
+  float n  = wfbm(p * 1.1,  t);
+  float n2 = wfbm(p * 0.62 + vec2(3.7, 2.1), t * 0.50);
+  float v  = mix(n, n2, 0.38);
 
-          sk.endShape(sk.CLOSE);
-        }
-      }
+  /* Wet-bead edge darkening: 3.8·v·(1-v) peaks at v=0.5   */
+  /* which is exactly where paint regions meet — darkens    */
+  /* the boundary like pigment accumulating at a wet edge.  */
+  float bead = 3.8 * v * (1.0 - v);
 
-      get done() {
-        return this.phase === 'out' && this.alpha < 0.5;
-      }
-    }
+  /* Paper granulation — high-freq noise, very subtle */
+  float grain = (vnoise(uv * 180.0) - 0.5) * 0.013;
 
-    // ── p5 lifecycle ───────────────────────────────────────
-    sk.setup = () => {
-      const cnv = sk.createCanvas(wrap.offsetWidth, wrap.offsetHeight);
-      cnv.parent(wrap);
-      sk.colorMode(sk.RGB, 255, 255, 255, 255);
-      sk.frameRate(30);
-      sk.noSmooth();
-    };
+  vec3 col = palette(v);
+  col = mix(col, col * 0.58, bead * 0.44); /* darken at edges */
+  col = clamp(col + grain, 0.0, 1.0);
 
-    sk.draw = () => {
-      sk.clear();
+  /* Alpha: only paint regions are opaque; paper shows through */
+  float alpha = smoothstep(0.30, 0.64, v) * 0.28 + bead * 0.05;
+  gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.33));
+}
+`;
 
-      // Spawn a new wave every 4-10 seconds (at 30fps)
-      if (--nextIn <= 0 && waves.length < 4) {
-        waves.push(new Wave());
-        nextIn = sk.floor(sk.random(120, 300));
-      }
+  // ── Compile & link ─────────────────────────────────────
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
 
-      waves = waves.filter(w => !w.done);
-      const t = sk.frameCount;
-      for (const w of waves) {
-        w.update();
-        w.draw(t);
-      }
-    };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog);
 
-    sk.windowResized = () => {
-      sk.resizeCanvas(wrap.offsetWidth, wrap.offsetHeight);
-    };
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    console.warn('Watercolor shader link error:', gl.getProgramInfoLog(prog));
+    return;
+  }
 
-  }, wrap);
+  gl.useProgram(prog);
+
+  // Full-screen quad (triangle strip)
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+  const aloc = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(aloc);
+  gl.vertexAttribPointer(aloc, 2, gl.FLOAT, false, 0, 0);
+
+  const uTime = gl.getUniformLocation(prog, 'uTime');
+  const uRes  = gl.getUniformLocation(prog, 'uRes');
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  gl.clearColor(0, 0, 0, 0);
+
+  // ── Resize ─────────────────────────────────────────────
+  function resize() {
+    // Render at half resolution — bilinear browser upscale
+    // softens the output exactly like watercolor diffuses on paper
+    const W = Math.max(1, Math.round(wrap.offsetWidth  * 0.5));
+    const H = Math.max(1, Math.round(wrap.offsetHeight * 0.5));
+    canvas.width  = W;
+    canvas.height = H;
+    gl.viewport(0, 0, W, H);
+    gl.uniform2f(uRes, W, H);
+  }
+
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  // ── Render loop (pause when hero off-screen) ───────────
+  let visible = true;
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+  }, { threshold: 0 }).observe(wrap);
+
+  function draw(ts) {
+    requestAnimationFrame(draw);
+    if (!visible) return;
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(uTime, ts * 0.001);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  requestAnimationFrame(draw);
 })();
 
 
