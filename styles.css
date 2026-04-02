@@ -88,39 +88,7 @@ a { color: inherit; text-decoration: none; }
   z-index: 9998;
 }
 
-/* ── 5. HERO WATERCOLOR CANVAS ── */
-#hero-canvas-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-#hero-canvas-wrap canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* ── 6. CURSOR — small dot only ── */
-#cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  opacity: 0.65;
-  transition: opacity 0.3s ease;
-}
-
-@media (hover: none) { #cursor-dot { display: none; } }
-
-/* ── 7. LAYOUT ── */
+/* ── 5. LAYOUT ── */
 .container {
   max-width: 1080px;
   margin: 0 auto;
@@ -343,34 +311,6 @@ a { color: inherit; text-decoration: none; }
   100% { transform: scale(1) rotate(0deg); }
 }
 
-/* Verstappen/F1 margin number Easter egg */
-.margin-num {
-  position: absolute;
-  font-family: var(--hand);
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--ink);
-  opacity: 0.038;
-  pointer-events: none;
-  user-select: none;
-  letter-spacing: 0.05em;
-  z-index: 3;
-}
-
-/* Box-box-box pit call annotation */
-.box-call {
-  position: absolute;
-  font-family: var(--hand);
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--ink);
-  opacity: 0.038;
-  transform: rotate(-2.5deg);
-  pointer-events: none;
-  white-space: nowrap;
-  letter-spacing: 0.08em;
-  z-index: 3;
-}
 
 /* ── 11. SECTIONS ── */
 .section {
@@ -417,7 +357,7 @@ a { color: inherit; text-decoration: none; }
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 44px;  /* more breathing room so tape pins don't overlap */
+  gap: 36px;
 }
 
 .project-card {
@@ -426,65 +366,30 @@ a { color: inherit; text-decoration: none; }
   min-height: 320px;
   background: var(--paper-card);
   border-radius: 3px;
-  overflow: visible;  /* allow washi tape to peek above */
+  overflow: hidden;
+  border-left: 3px solid rgba(184, 92, 58, 0.25);
   box-shadow:
     0 2px 6px var(--shadow-soft),
-    0 8px 28px var(--shadow),
-    3px 6px 16px var(--shadow-soft);
-  transition: transform 0.55s var(--ease-out),
-              box-shadow 0.55s var(--ease-out);
+    0 6px 20px var(--shadow);
+  transition: transform 0.45s var(--ease-out),
+              box-shadow 0.45s var(--ease-out);
   position: relative;
 }
 
-/* Washi tape strip pinned at top */
-.project-card::before {
-  content: '';
-  position: absolute;
-  top: -11px;
-  left: var(--tape-x, 46%);
-  width: 62px;
-  height: 22px;
-  background: rgba(196, 165, 90, 0.22);
-  /* Subtle cross-pattern to feel like washi tape */
-  background-image:
-    repeating-linear-gradient(90deg, transparent, transparent 5px,
-      rgba(180,150,80,0.1) 5px, rgba(180,150,80,0.1) 6px),
-    repeating-linear-gradient(0deg, transparent, transparent 5px,
-      rgba(180,150,80,0.07) 5px, rgba(180,150,80,0.07) 6px);
-  background-color: rgba(196, 165, 90, 0.22);
-  border-radius: 1px;
-  transform: rotate(var(--tape-rot, -1.5deg));
-  box-shadow: 1px 2px 4px rgba(44,36,23,0.1);
-  z-index: 10;
-  pointer-events: none;
-}
-
-/* Vary tape per card */
-.project-card:nth-child(1) { --tape-rot: -1.5deg; --tape-x: 44%; }
-.project-card:nth-child(2) { --tape-rot:  1.8deg; --tape-x: 50%; }
-.project-card:nth-child(3) { --tape-rot: -0.8deg; --tape-x: 47%; }
-
-/* Slight random rotation — casually pinned */
-.project-card:nth-child(1) { transform: rotate(-1.4deg); }
-.project-card:nth-child(2) { transform: rotate( 1.1deg); }
-.project-card:nth-child(3) { transform: rotate(-0.7deg); }
-
 .project-card:hover {
-  transform: rotate(0deg) translateY(-6px) !important;
+  transform: translateY(-4px);
   box-shadow:
     0 4px 12px var(--shadow-soft),
-    0 18px 52px rgba(44,36,23,0.18),
-    4px 8px 24px var(--shadow-soft);
+    0 14px 40px rgba(44,36,23,0.15);
 }
 
-/* Media area — overflow hidden to contain content, but card itself is overflow:visible */
+/* Media area */
 .project-media {
   position: relative;
   overflow: hidden;
   min-height: 260px;
   background: var(--paper-deep);
-  /* Clip inner content but not the torn edge */
-  border-radius: 3px 0 0 3px;
+  border-radius: 0;
 }
 
 .project-placeholder {
@@ -516,36 +421,6 @@ a { color: inherit; text-decoration: none; }
   50%       { transform: scale(1.07) rotate(1.5deg); }
 }
 
-/* Torn paper edge at bottom of media */
-.project-media::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 20px;
-  /* Matches project-info background */
-  background: var(--paper-card);
-  pointer-events: none;
-  z-index: 2;
-  clip-path: polygon(
-    0% 100%, 0% 65%,
-    2% 32%,   4% 78%,   6% 22%,   8% 68%,
-    10% 38%,  12% 84%,  14% 18%,  16% 72%,
-    18% 42%,  20% 88%,  22% 28%,  24% 70%,
-    26% 15%,  28% 80%,  30% 40%,  32% 76%,
-    34% 25%,  36% 66%,  38% 12%,  40% 78%,
-    42% 36%,  44% 74%,  46% 20%,  48% 84%,
-    50% 40%,  52% 76%,  54% 18%,  56% 70%,
-    58% 36%,  60% 80%,  62% 26%,  64% 64%,
-    66% 16%,  68% 76%,  70% 40%,  72% 86%,
-    74% 30%,  76% 70%,  78% 20%,  80% 78%,
-    82% 34%,  84% 76%,  86% 22%,  88% 80%,
-    90% 38%,  92% 74%,  94% 16%,  96% 70%,
-    98% 44%,  100% 68%,
-    100% 100%
-  );
-}
 
 .project-info {
   padding: clamp(24px, 3.5vw, 48px);
@@ -1112,7 +987,7 @@ a { color: inherit; text-decoration: none; }
 /* ── 19. RESPONSIVE ── */
 @media (max-width: 900px) {
   .project-card { grid-template-columns: 1fr; min-height: auto; }
-  .project-media { min-height: 200px; border-radius: 3px 3px 0 0; }
+  .project-media { min-height: 200px; }
   .about-layout { grid-template-columns: 1fr; gap: 52px; }
   .about-beliefs { border-top: 1px solid var(--border); padding-top: 44px; }
 }
