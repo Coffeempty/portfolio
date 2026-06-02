@@ -3,296 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mehul Totala — Production Engineering at VJTI Mumbai. Building robots, doing open mics, writing things.">
+  <meta name="description" content="Mehul Totala — ML, robotics, and cool stuff at VJTI Mumbai.">
   <title>Mehul Totala</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Kalam:wght@300;400;700&family=Nunito:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Watercolor paper grain -->
-  <svg class="paper-grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <filter id="paper-noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.45 0.8" numOctaves="5" stitchTiles="stitch"/>
-      <feColorMatrix type="matrix"
-        values="0 0 0 0 0.48
-                0 0 0 0 0.38
-                0 0 0 0 0.28
-                0 0 0 0 0.13"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#paper-noise)"/>
-  </svg>
-
-  <!-- Nav -->
-  <nav class="site-nav" id="site-nav">
+  <nav class="site-nav">
     <a href="index.html" class="nav-logo">MT</a>
     <div class="nav-links">
       <a href="#work">Work</a>
-      <a href="#writing">Writing</a>
       <a href="mailto:mehultotala21@gmail.com" class="nav-connect">Connect</a>
     </div>
   </nav>
 
-  <main>
+  <section class="hero">
+    <!-- ambient decorative ring -->
+    <div class="hero-ring"><div class="hero-ring-dot"></div></div>
 
-    <!-- ══ HERO ══ -->
-    <section class="hero" id="hero">
-      <div class="hero-inner">
-        <p class="hero-greeting">hi, I'm</p>
-        <h1 class="hero-name">Mehul Totala</h1>
-        <p class="hero-bio">Second year at VJTI Mumbai, studying production engineering. Most of my time goes into robots, computer vision, and language models. The rest goes to stand-up, poetry, and whatever I've fallen into this week.</p>
-      </div>
+    <p class="hero-tag">ML · Robotics · Systems</p>
 
-      <div class="hero-scroll" aria-hidden="true">
-        <div class="scroll-line"></div>
-      </div>
-    </section>
+    <h1 class="hero-name">
+      <span class="first">Mehul</span>
+      <span class="last">Totala</span>
+    </h1>
 
-    <!-- ══ WORK ══ -->
-    <section class="section" id="work">
-      <div class="container">
-        <svg class="section-rule" viewBox="0 0 1000 10" preserveAspectRatio="none" fill="none" stroke="#c2b5a3" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path d="M 0 5 Q 125 1 250 5 Q 375 9 500 5 Q 625 1 750 5 Q 875 9 1000 5"/>
-        </svg>
-      </div>
+    <p class="hero-descriptor">
+      <span>VJTI Mumbai</span>
+      <span>B.Tech Production Eng.</span>
+      <span>SRA</span>
+    </p>
 
-      <div class="container">
-        <h2 class="section-title reveal">Work</h2>
+    <p class="hero-bio">
+      Second year, figuring things out. I build things at the edge of
+      <strong>language models</strong>, <strong>computer vision</strong>, and <strong>robotics</strong>.
+      The rest of my time goes to stand-up, poetry, and whatever I've fallen into this week.
+    </p>
 
-        <div class="projects">
+    <div class="hero-links">
+      <a href="https://github.com/Coffeempty" target="_blank" rel="noopener" class="hero-link">github</a>
+      <a href="https://linkedin.com/in/mehultotala" target="_blank" rel="noopener" class="hero-link">linkedin</a>
+      <a href="https://x.com/emptysaysstuff" target="_blank" rel="noopener" class="hero-link">twitter</a>
+      <a href="https://instagram.com/emptyyy_echoes" target="_blank" rel="noopener" class="hero-link">poems</a>
+      <a href="mailto:mehultotala21@gmail.com" class="hero-link">email</a>
+    </div>
+  </section>
 
-          <!-- jax-cce -->
-          <article class="project-card reveal">
-            <div class="project-media">
-              <div class="project-placeholder">
-                <div class="placeholder-gradient" style="--ph-color:100,120,160"></div>
-              </div>
-            </div>
-            <div class="project-info">
-              <div class="project-meta">
-                <div class="project-tags">
-                  <span class="tag">JAX</span>
-                  <span class="tag">XLA</span>
-                  <span class="tag">PyPI</span>
-                </div>
-                <span class="project-year">2025</span>
-              </div>
-              <h3 class="project-title">jax-cce</h3>
-              <p class="project-desc">Published a Python package that cuts memory usage by 97% for the most expensive step in LLM training. Cross-entropy loss in models like Llama-3 creates a 4GB logits tensor that gets used once and thrown away — jax-cce tiles over vocabulary chunks instead, never materialising the full tensor. Same math, same gradients. Reviewed by a JAX core maintainer at Google DeepMind.</p>
-              <div class="project-tags-bottom">
-                <span class="tag-sm">custom_vjp</span>
-                <span class="tag-sm">lax.scan</span>
-                <span class="tag-sm">FlashAttention trick</span>
-              </div>
-              <div class="project-links" style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
-                <a href="https://github.com/Coffeempty/jax-cce" target="_blank" rel="noopener" class="proj-link">GitHub</a>
-                <a href="https://pypi.org/project/jax-cce/" target="_blank" rel="noopener" class="proj-link">PyPI</a>
-                <a href="https://arxiv.org/abs/2411.09009" target="_blank" rel="noopener" class="proj-link">Paper</a>
-                <a href="https://github.com/jax-ml/jax/pull/35915" target="_blank" rel="noopener" class="proj-link">JAX PR</a>
-              </div>
-            </div>
-          </article>
+  <section class="section" id="work">
+    <h2 class="section-title">Work</h2>
+    <div class="projects">
 
-          <!-- Codeuctivity -->
-          <article class="project-card reveal" style="--delay:0.1s">
-            <div class="project-media">
-              <div class="project-placeholder">
-                <div class="placeholder-gradient" style="--ph-color:180,140,56"></div>
-              </div>
-            </div>
-            <div class="project-info">
-              <div class="project-meta">
-                <div class="project-tags">
-                  <span class="tag">NLP</span>
-                  <span class="tag">Transformers</span>
-                  <span class="tag">LoRA</span>
-                </div>
-                <span class="project-year">2025</span>
-              </div>
-              <h3 class="project-title">Codeuctivity</h3>
-              <p class="project-desc">CodeT5 fine-tuned with LoRA to turn code functions into clean natural-language explanations — then improved with RLFT so the model keeps getting better through use.</p>
-              <div class="project-tags-bottom">
-                <span class="tag-sm">CodeT5</span>
-                <span class="tag-sm">RLFT</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- RL for LLMs -->
-          <article class="project-card reveal" style="--delay:0.2s">
-            <div class="project-media">
-              <div class="project-placeholder">
-                <div class="placeholder-gradient" style="--ph-color:100,140,100"></div>
-              </div>
-            </div>
-            <div class="project-info">
-              <div class="project-meta">
-                <div class="project-tags">
-                  <span class="tag">RL</span>
-                  <span class="tag">LLMs</span>
-                  <span class="tag">GRPO</span>
-                </div>
-                <span class="project-year">2025</span>
-              </div>
-              <h3 class="project-title">RL for LLMs</h3>
-              <p class="project-desc">GRPO-based reinforcement learning fine-tuning for large language models. Synthetic data pipeline via OpenRouter + RULER, and a closed-loop system that self-trains on new tasks.</p>
-              <div class="project-tags-bottom">
-                <span class="tag-sm">GRPO</span>
-                <span class="tag-sm">Self-Training</span>
-              </div>
-            </div>
-          </article>
-
+      <article class="project-card reveal">
+        <div class="project-top">
+          <h3 class="project-title">jax-cce</h3>
+          <span class="project-year">2025</span>
         </div>
-      </div>
-
-      <!-- Doodle: coffee cup -->
-      <div class="doodle-wrap" style="top:5%;right:2%;transform:rotate(8deg);" aria-hidden="true">
-        <svg class="doodle" width="52" height="58" viewBox="0 0 52 58" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 7 20 L 10 52 Q 10 56 14 56 L 38 56 Q 42 56 42 52 L 45 20 Z"/>
-          <path d="M 7 20 Q 26 22 45 20"/>
-          <path d="M 42 30 Q 52 28 52 38 Q 52 48 42 46"/>
-          <path d="M 18 16 Q 16 11 18 6 Q 20 2 18 -1" stroke-width="1.5"/>
-          <path d="M 27 16 Q 25 11 27 6 Q 29 2 27 -1" stroke-width="1.5"/>
-        </svg>
-      </div>
-
-      <!-- Doodle: paper airplane -->
-      <div class="doodle-wrap" style="bottom:7%;right:4%;transform:rotate(-28deg);" aria-hidden="true">
-        <svg class="doodle" width="56" height="46" viewBox="0 0 56 46" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 2 22 L 54 4 L 32 44 Z"/>
-          <path d="M 2 22 L 32 26 L 32 44"/>
-          <path d="M 32 26 L 54 4"/>
-          <path d="M 2 22 L 20 24"/>
-        </svg>
-      </div>
-
-      <!-- Doodle: F1 car Easter egg — tucked bottom-left, very faint -->
-      <div class="doodle-wrap" style="bottom:9%;left:1.5%;transform:rotate(-4deg);" aria-hidden="true">
-        <svg class="doodle" width="76" height="28" viewBox="0 0 76 28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.22;">
-          <path d="M 9 14 Q 13 5 23 4 L 52 4 Q 62 5 65 14 Q 62 23 52 24 L 23 24 Q 13 23 9 14 Z"/>
-          <path d="M 9 14 L 2 14" stroke-width="2.2"/>
-          <path d="M 7 12 L 2 10 M 7 16 L 2 18"/>
-          <path d="M 65 9 L 73 7 L 73 21 L 65 19"/>
-          <path d="M 30 4 Q 35 0 42 0 Q 49 0 53 4"/>
-          <rect x="15" y="1" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
-          <rect x="50" y="1" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
-          <rect x="15" y="23" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
-          <rect x="50" y="23" width="8" height="4" rx="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
-        </svg>
-      </div>
-
-    </section>
-
-    <!-- ══ WRITING ══ -->
-    <section class="section" id="writing">
-      <div class="container">
-        <svg class="section-rule" viewBox="0 0 1000 10" preserveAspectRatio="none" fill="none" stroke="#c2b5a3" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path d="M 0 5 Q 80 2 160 5 Q 240 8 320 5 Q 400 2 480 5 Q 560 8 640 5 Q 720 2 800 5 Q 880 8 960 5 Q 980 3 1000 5"/>
-        </svg>
-
-        <h2 class="section-title reveal">Writing</h2>
-
-        <div class="posts-list">
-          <a href="blog_posts/surviving-between-polymath.html" class="post-entry reveal">
-            <div class="post-entry-left">
-              <span class="post-entry-date">Jan 2026</span>
-            </div>
-            <div class="post-entry-right">
-              <span class="post-entry-title">Surviving Somewhere in Between</span>
-              <span class="post-entry-excerpt">On being a polymath, the chaos of curiosity, and trying to prioritise the mess — written at 3am, meant for future me.</span>
-            </div>
-            <span class="post-entry-arrow">→</span>
-          </a>
+        <p class="project-desc">Cuts memory usage by 97% for the most expensive step in LLM training. Cross-entropy loss in models like Llama-3 creates a 4 GB logits tensor used once and discarded — jax-cce tiles over vocabulary chunks instead, never materialising the full tensor. Same math, same gradients. Reviewed by a JAX core maintainer at Google DeepMind.</p>
+        <div class="project-tags">
+          <span class="tag">JAX</span>
+          <span class="tag">XLA</span>
+          <span class="tag">custom_vjp</span>
+          <span class="tag">lax.scan</span>
+          <span class="tag">PyPI</span>
         </div>
+        <div class="project-links">
+          <a href="https://github.com/Coffeempty/jax-cce" target="_blank" rel="noopener" class="proj-link">GitHub →</a>
+          <a href="https://pypi.org/project/jax-cce/" target="_blank" rel="noopener" class="proj-link">PyPI →</a>
+          <a href="https://arxiv.org/abs/2411.09009" target="_blank" rel="noopener" class="proj-link">Paper →</a>
+          <a href="https://github.com/jax-ml/jax/pull/35915" target="_blank" rel="noopener" class="proj-link">JAX PR →</a>
+        </div>
+      </article>
 
-        <a href="blog.html" class="see-all reveal">All writing →</a>
-      </div>
+      <article class="project-card reveal">
+        <div class="project-top">
+          <h3 class="project-title">Codeuctivity</h3>
+          <span class="project-year">2025</span>
+        </div>
+        <p class="project-desc">CodeT5 fine-tuned with LoRA to turn code functions into clean natural-language explanations — then improved with RLFT so the model keeps getting better through use.</p>
+        <div class="project-tags">
+          <span class="tag">NLP</span>
+          <span class="tag">Transformers</span>
+          <span class="tag">LoRA</span>
+          <span class="tag">CodeT5</span>
+          <span class="tag">RLFT</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Coffeempty/Codeuctivity" target="_blank" rel="noopener" class="proj-link">GitHub →</a>
+        </div>
+      </article>
 
-      <!-- Doodle: open book -->
-      <div class="doodle-wrap" style="top:10%;left:3%;transform:rotate(-8deg);" aria-hidden="true">
-        <svg class="doodle" width="54" height="44" viewBox="0 0 54 44" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 2 6 Q 2 2 6 2 L 25 2 Q 27 2 27 6 L 27 40 Q 15 38 2 42 Z"/>
-          <path d="M 52 6 Q 52 2 48 2 L 29 2 Q 27 2 27 6 L 27 40 Q 39 38 52 42 Z"/>
-          <path d="M 27 4 L 27 40"/>
-          <path d="M 7 14 L 23 12 M 7 20 L 23 18 M 7 26 L 22 24" stroke-width="1.3"/>
-          <path d="M 31 12 L 47 14 M 31 18 L 47 20 M 32 24 L 47 26" stroke-width="1.3"/>
-        </svg>
-      </div>
+      <article class="project-card reveal">
+        <div class="project-top">
+          <h3 class="project-title">RL for LLMs</h3>
+          <span class="project-year">2025</span>
+        </div>
+        <p class="project-desc">GRPO-based reinforcement learning fine-tuning for large language models. Synthetic data pipeline via OpenRouter + RULER, and a closed-loop system that self-trains on new tasks.</p>
+        <div class="project-tags">
+          <span class="tag">RL</span>
+          <span class="tag">LLMs</span>
+          <span class="tag">GRPO</span>
+          <span class="tag">Self-Training</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Coffeempty/rl_for_llms" target="_blank" rel="noopener" class="proj-link">GitHub →</a>
+        </div>
+      </article>
 
-      <!-- Doodle: squiggles -->
-      <div class="doodle-wrap" style="bottom:20%;right:5%;" aria-hidden="true">
-        <svg class="doodle" width="68" height="32" viewBox="0 0 72 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="opacity:0.35;">
-          <path d="M 0 8 Q 8 2 16 8 Q 24 14 32 8 Q 40 2 48 8 Q 56 14 64 8 Q 68 5 72 6"/>
-          <path d="M 0 20 Q 8 14 16 20 Q 24 26 32 20 Q 40 14 48 20 Q 56 26 64 20 Q 68 17 72 18"/>
-        </svg>
-      </div>
+    </div>
+  </section>
 
-    </section>
-
-  </main>
-
-  <!-- ══ FOOTER ══ -->
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-left">
-          <p class="footer-tagline">made slowly, with intention.</p>
-          <p class="footer-copy">© <span id="footer-year">2026</span> Mehul Totala &nbsp;·&nbsp; VJTI Mumbai</p>
-        </div>
-        <div class="footer-right">
-          <div class="footer-links">
-            <a href="mailto:mehultotala21@gmail.com"        class="footer-link">email</a>
-            <a href="https://github.com/Coffeempty"         target="_blank" rel="noopener" class="footer-link">github</a>
-            <a href="https://linkedin.com/in/mehultotala"   target="_blank" rel="noopener" class="footer-link">linkedin</a>
-            <a href="https://x.com/emptysaysstuff"          target="_blank" rel="noopener" class="footer-link">twitter</a>
-            <a href="https://instagram.com/emptyyy_echoes"  target="_blank" rel="noopener" class="footer-link">poems</a>
-          </div>
-          <div class="eq-bars" title="always listening" aria-hidden="true">
-            <span class="eq-bar"></span>
-            <span class="eq-bar"></span>
-            <span class="eq-bar"></span>
-            <span class="eq-bar"></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-doodles">
-        <!-- Heart -->
-        <span class="footer-doodle-item">
-          <svg viewBox="0 0 36 32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M 18 28 Q 5 18 3 11 Q 1 3 8 1 Q 14 0 18 8 Q 22 0 28 1 Q 35 3 33 11 Q 31 18 18 28 Z"/>
-          </svg>
-        </span>
-        <!-- Checkered flag Easter egg -->
-        <span class="footer-doodle-item" style="opacity:0.18;">
-          <svg viewBox="0 0 46 50" width="40" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M 5 4 L 5 48"/>
-            <path d="M 5 4 Q 16 2 25 6 Q 34 10 44 8 L 42 28 Q 32 26 23 30 Q 14 34 5 32 Z"/>
-            <line x1="5"  y1="14" x2="43" y2="14" stroke-width="1.3"/>
-            <line x1="5"  y1="24" x2="41" y2="24" stroke-width="1.3"/>
-            <line x1="15" y1="4"  x2="15" y2="32" stroke-width="1.3"/>
-            <line x1="25" y1="4"  x2="25" y2="32" stroke-width="1.3"/>
-            <line x1="35" y1="4"  x2="34" y2="30" stroke-width="1.3"/>
-          </svg>
-        </span>
-        <!-- Stars -->
-        <span class="footer-doodle-item" style="transform:rotate(-5deg)">
-          <svg viewBox="0 0 50 28" width="48" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M 10 14 L 11.5 9.5 L 14 4 L 16.5 9.5 L 22 11 L 17 15 L 18 21 L 14 18 L 10 21 L 11 15 Z"/>
-            <path d="M 32 12 L 33 9 L 34.5 5 L 36 9 L 39 10 L 36 13 L 36.5 17 L 34.5 15 L 32 17 L 32.5 13 Z"/>
-          </svg>
-        </span>
-      </div>
-
+    <div>
+      <span class="footer-id">Mehul Totala</span>
+      <p class="footer-meta">VJTI Mumbai<span>Production Engineering</span><span>© 2026</span></p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:mehultotala21@gmail.com" class="footer-link">email</a>
+      <a href="https://github.com/Coffeempty" target="_blank" rel="noopener" class="footer-link">github</a>
+      <a href="https://linkedin.com/in/mehultotala" target="_blank" rel="noopener" class="footer-link">linkedin</a>
+      <a href="https://x.com/emptysaysstuff" target="_blank" rel="noopener" class="footer-link">twitter</a>
+      <a href="https://instagram.com/emptyyy_echoes" target="_blank" rel="noopener" class="footer-link">poems</a>
     </div>
   </footer>
 
-  <!-- #33 was here -->
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          e.target.style.transitionDelay = (i * 0.09) + 's';
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  <script src="script.js"></script>
+    const yr = document.querySelector('.footer-meta span:last-child');
+    if (yr) yr.textContent = '© ' + new Date().getFullYear();
+  </script>
 </body>
 </html>
